@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unrelated_type_equality_checks, unused_element, unnecessary_brace_in_string_interps
+// ignore_for_file: avoid_print, unrelated_type_equality_checks, unused_element, unnecessary_brace_in_string_interps, non_constant_identifier_names
 
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
 import 'package:manger_mission/view/home_page.dart';
+import 'package:manger_mission/view/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,7 +25,7 @@ TextEditingController emailController = TextEditingController();
 
 TextEditingController passwordController = TextEditingController();
 bool checkedBox = false;
-bool obscureText = false;
+bool obscureText = true;
 
 final formKey = GlobalKey<FormState>();
 
@@ -33,25 +34,22 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
-      backgroundColor: Constants.colorGrey,
+      // backgroundColor: Constants.colorGrey,
       extendBody: true,
-      body: Center(
-        child: Form(
-          key: formKey,
+      body: Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                   flex: 2,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [_title(context)],
                   )),
-              const Spacer(
-                flex: 1,
-              ),
               Expanded(
-                flex: 7,
+                flex: 8,
                 child: Column(
                   children: [
                     _emailCardTextfield(),
@@ -60,13 +58,37 @@ class _LoginPageState extends State<LoginPage> {
                     Constants.sizedBoxHeight20,
                     _rowCheckBoxAnfForgetText(context),
                     Constants.sizedBoxHeight20,
-                    _loginButton(context),
+                    _LoginButton(
+                      context,
+                    ),
+                    Constants.sizedBoxHeight10,
+                    _greyText(context, "Or Login With"),
+                    Constants.sizedBoxHeight10,
+                    _googleButton(context),
+                    Constants.sizedBoxHeight20,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _greyText(context, "If you don't have an acocount? "),
+                        _customTextButton(context, "Sign Up")
+                      ],
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Text _greyText(BuildContext context, String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 18,
+        color: Constants.colorGrey,
       ),
     );
   }
@@ -86,14 +108,60 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  CupertinoButton _loginButton(BuildContext context) {
-    return CupertinoButton.filled(
-      onPressed: () async {
-        if (formKey.currentState?.validate() == true) {
-          Get.to(const HomePage());
-        }
-      },
-      child: _buttonText(context),
+  Widget _LoginButton(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
+        elevation: 5,
+        child: CupertinoButton(
+          color: Constants.colorPurpleButton,
+          borderRadius: Constants.borderRadius15,
+          onPressed: () async {
+            if (formKey.currentState?.validate() == true) {
+              Get.to(
+                duration: const Duration(seconds: 1),
+                curve: Curves.bounceOut,
+                const HomePage(),
+              );
+            }
+          },
+          child: _buttonText(context, "Login", Constants.colorWhite),
+        ),
+      ),
+    );
+  }
+
+  Widget _googleButton(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
+        elevation: 5,
+        child: CupertinoButton(
+          color: Constants.colorWhite,
+          borderRadius: Constants.borderRadius15,
+          onPressed: () async {
+            Get.to(
+              duration: const Duration(seconds: 1),
+              curve: Curves.bounceOut,
+              const RegisterPage(),
+            );
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.g_mobiledata,
+                size: 35,
+                color: Constants.colorPurpleButton,
+              ),
+              _buttonText(context, "Google", Constants.colorBlack),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -104,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
         Row(
           children: [_checkBox(), _rememberText(context)],
         ),
-        _forgetTextButton(context)
+        _customTextButton(context, "Forgot to Password ?")
       ],
     );
   }
@@ -115,12 +183,14 @@ class _LoginPageState extends State<LoginPage> {
       style: Theme.of(context)
           .textTheme
           .headline5
-          ?.copyWith(color: Constants.colorWhite, fontWeight: FontWeight.bold),
+          ?.copyWith(color: Constants.colorBlack, fontWeight: FontWeight.bold),
     );
   }
 
   Card _emailCardTextfield() {
     return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
       child: Padding(
         padding: const EdgeInsets.only(left: 20),
         child: Center(
@@ -129,10 +199,11 @@ class _LoginPageState extends State<LoginPage> {
             keyboardType: TextInputType.emailAddress,
             controller: emailController,
             decoration: const InputDecoration(
+                border: InputBorder.none,
                 hintText: "Please Write to an Email Ex: adasd@dada ",
-                suffixIcon: Icon(
+                prefixIcon: Icon(
                   Icons.email_sharp,
-                  size: 30,
+                  size: 25,
                 ),
                 labelText: "Email"),
           ),
@@ -143,6 +214,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Card _passwordCardTextfield() {
     return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
       child: Padding(
         padding: const EdgeInsets.only(left: 20),
         child: Center(
@@ -152,7 +225,12 @@ class _LoginPageState extends State<LoginPage> {
             obscureText: obscureText,
             controller: passwordController,
             decoration: InputDecoration(
+                border: InputBorder.none,
                 hintText: "Please Write to a Password ",
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  size: 25,
+                ),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -183,27 +261,36 @@ class _LoginPageState extends State<LoginPage> {
       style: Theme.of(context)
           .textTheme
           .subtitle1
-          ?.copyWith(color: Constants.colorWhite, fontWeight: FontWeight.bold),
+          ?.copyWith(color: Constants.colorBlack, fontWeight: FontWeight.bold),
     );
   }
 
-  TextButton _forgetTextButton(BuildContext context) {
+  TextButton _customTextButton(BuildContext context, String title) {
     return TextButton(
-        onPressed: () {},
+        onPressed: () {
+          title == "Sign Up"
+              ? Get.to(
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.bounceOut,
+                  const RegisterPage(),
+                )
+              : null;
+        },
         child: Text(
-          "Forget to Password ?",
+          title,
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              color: Constants.colorBlue, fontWeight: FontWeight.bold),
+              color: Constants.colorPurpleButton, fontWeight: FontWeight.bold),
         ));
   }
 
-  Text _buttonText(BuildContext context) {
+  Text _buttonText(BuildContext context, String title, Color color) {
     return Text(
-      "Login",
+      title,
       style: Theme.of(context).textTheme.subtitle1?.copyWith(
-          color: Constants.colorWhite,
-          fontSize: 25,
-          fontWeight: FontWeight.bold),
+            color: color,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
     );
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:manger_mission/view/add_task_page.dart';
-import 'package:manger_mission/view/home_page.dart';
 import 'package:manger_mission/view/login_page.dart';
 
 void main() {
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AddTaskPage(),
+      home: const LoginPage(),
     );
   }
 }

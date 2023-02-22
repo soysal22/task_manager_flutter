@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Get.to(AddTaskPage());
                     },
-                    child: Center(child: Text("+Add a Task")))
+                    child: Center(child: Text("+ Add Task")))
               ],
             )
           ],

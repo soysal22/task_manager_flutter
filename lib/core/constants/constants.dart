@@ -12,8 +12,10 @@ class Constants {
 
 // Colors
   static const Color colorTransparent = Colors.transparent;
-  static Color colorGrey = Colors.grey.shade700;
+  static const Color colorGrey = Colors.grey;
   static const Color colorWhite = Colors.white;
+  static const Color colorPurpleButton = Color.fromARGB(255, 118, 80, 255);
+  static const Color colorRed = Colors.red;
   static const Color colorBlue = Colors.blue;
   static const Color colorBlack = Colors.black;
   static const Color colorGreen = Color.fromARGB(172, 14, 201, 185);
@@ -31,4 +33,8 @@ class Constants {
   static const SizedBox sizedBoxHeight20 = SizedBox(height: 20);
   static const SizedBox sizedBoxHeight10 = SizedBox(height: 10);
   static const SizedBox sizedBoxHeight5 = SizedBox(height: 5);
+
+  //   Width
+
+  static const SizedBox sizedBoxWidth10 = SizedBox(height: 10);
 }

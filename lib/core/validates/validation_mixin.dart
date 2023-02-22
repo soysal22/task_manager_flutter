@@ -1,4 +1,11 @@
 class ValidationMixin {
+  String? validateName(value) {
+    if (value.length < 2) {
+      return "Lütfen Geçerli Bir Name Giriniz  ";
+    }
+    return null;
+  }
+
   String? validatePassword(value) {
     if (value.length == 0) {
       return "Lütfen Geçerli Bir Password Giriniz  ";
