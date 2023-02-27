@@ -1,9 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
 import 'package:manger_mission/view/login_page.dart';
@@ -29,6 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Constants.colorWhite,
         appBar: _appBarDesign(),
         body: Padding(
           padding: const EdgeInsets.all(20),
@@ -42,7 +41,19 @@ class _RegisterPageState extends State<RegisterPage> {
                 Constants.sizedBoxHeight20,
                 _passwordTextfield(),
                 Constants.sizedBoxHeight20,
-                _savedButton(context)
+                _createButton(context),
+                Constants.sizedBoxHeight20,
+                _greyText(context, "Or Sign Up with"),
+                Constants.sizedBoxHeight20,
+                _googleButton(context),
+                Constants.sizedBoxHeight20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _greyText(context, "You have an account? "),
+                    _siginButton(context)
+                  ],
+                ),
               ],
             ),
           ),
@@ -51,29 +62,88 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  CupertinoButton _savedButton(BuildContext context) {
-    return CupertinoButton.filled(
-      onPressed: () async {
-        if (registerFormKey.currentState?.validate() == true) {
-          Get.to(
-            duration: const Duration(seconds: 1),
-            curve: Curves.bounceOut,
-            const LoginPage(),
-          );
-        }
-      },
-      child: _buttonText(context),
+// google giriş kısımlarıını ekle
+  Widget _googleButton(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
+        elevation: 5,
+        child: CupertinoButton(
+          color: Constants.colorWhite,
+          borderRadius: Constants.borderRadius15,
+          onPressed: () async {
+            Get.to(
+              duration: const Duration(seconds: 1),
+              curve: Curves.bounceOut,
+              () {},
+            );
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.g_mobiledata,
+                size: 35,
+                color: Constants.colorPurpleButton,
+              ),
+              _buttonText(context, "Google", Constants.colorBlack),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Text _buttonText(BuildContext context) {
+  TextButton _siginButton(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          Get.to(const LoginPage());
+        },
+        child: Text(
+          "Sign In",
+          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              color: Constants.colorPurpleButton, fontWeight: FontWeight.bold),
+        ));
+  }
+
+  Text _greyText(BuildContext context, String title) {
     return Text(
-      "Save",
-      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-          color: Constants.colorWhite,
-          fontSize: 25,
-          fontWeight: FontWeight.bold),
+      title,
+      style: const TextStyle(
+        fontSize: 18,
+        color: Constants.colorGrey,
+      ),
     );
+  }
+
+  Widget _createButton(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: CupertinoButton(
+        color: Constants.colorPurpleButton,
+        onPressed: () async {
+          if (registerFormKey.currentState?.validate() == true) {
+            Get.to(
+              duration: const Duration(seconds: 1),
+              curve: Curves.bounceOut,
+              const LoginPage(),
+            );
+          }
+        },
+        child: _buttonText(
+            context, Constants.textCreateAccount, Constants.colorWhite),
+      ),
+    );
+  }
+
+  Text _buttonText(BuildContext context, String title, Color color) {
+    return Text(title,
+        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              color: color,
+              fontSize: 20,
+            ));
   }
 
   Card _nameTextField() {
@@ -83,6 +153,8 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.name,
         controller: registerNameController,
         decoration: const InputDecoration(
+            contentPadding: Constants.paddingLeft20,
+            border: InputBorder.none,
             hintText: "Please Write to a Name Ex: ibrahim ",
             suffixIcon: Icon(
               Icons.email_sharp,
@@ -100,6 +172,8 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.emailAddress,
         controller: registerEmailController,
         decoration: const InputDecoration(
+            contentPadding: Constants.paddingLeft20,
+            border: InputBorder.none,
             hintText: "Please Write to an Email Ex: adasd@dada ",
             suffixIcon: Icon(
               Icons.email_sharp,
@@ -112,50 +186,55 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Card _passwordTextfield() {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20),
-        child: Center(
-          child: TextFormField(
-            validator: ValidationMixin().validatePassword,
-            keyboardType: TextInputType.name,
-            obscureText: registerObscureText,
-            controller: registerPasswordController,
-            decoration: InputDecoration(
-                hintText: "Please Write to a Password ",
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      registerObscureText = !registerObscureText;
-                      log("obscureText in değeri  :  ${registerObscureText}");
-                    });
-                  },
-                  child: registerObscureText == true
-                      ? const Icon(
-                          Icons.remove_red_eye,
-                          size: 30,
-                        )
-                      : const Icon(
-                          Icons.close_rounded,
-                          size: 30,
-                        ),
-                ),
-                labelText: "Passsword "),
-          ),
-        ),
+      child: TextFormField(
+        validator: ValidationMixin().validatePassword,
+        keyboardType: TextInputType.name,
+        obscureText: registerObscureText,
+        controller: registerPasswordController,
+        decoration: InputDecoration(
+            contentPadding: Constants.paddingLeft20,
+            border: InputBorder.none,
+            hintText: "Please Write to a Password ",
+            suffixIcon: GestureDetector(
+              onTap: () {
+                setState(() {
+                  registerObscureText = !registerObscureText;
+                  log("obscureText in değeri  :  $registerObscureText");
+                });
+              },
+              child: registerObscureText == true
+                  ? const Icon(
+                      Icons.remove_red_eye,
+                      size: 30,
+                    )
+                  : const Icon(
+                      Icons.close_rounded,
+                      size: 30,
+                    ),
+            ),
+            labelText: "Passsword "),
       ),
     );
   }
 
   AppBar _appBarDesign() {
     return AppBar(
+      backgroundColor: Constants.colorWhite,
+      elevation: 0,
       automaticallyImplyLeading: false,
       leading: GestureDetector(
           onTap: () {
             Get.back();
           },
-          child: const Icon(Icons.arrow_back_ios_new)),
+          child: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Constants.colorBlack,
+          )),
       centerTitle: true,
-      title: const Text("Register Page"),
+      title: const Text(
+        Constants.textCreateAccount,
+        style: TextStyle(color: Constants.colorBlack),
+      ),
     );
   }
 }

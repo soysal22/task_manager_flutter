@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
-      // backgroundColor: Constants.colorGrey,
+      backgroundColor: Constants.colorWhite,
       extendBody: true,
       body: Form(
         key: formKey,
@@ -58,9 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                     Constants.sizedBoxHeight20,
                     _rowCheckBoxAnfForgetText(context),
                     Constants.sizedBoxHeight20,
-                    _LoginButton(
-                      context,
-                    ),
+                    _LoginButton(context),
                     Constants.sizedBoxHeight10,
                     _greyText(context, "Or Login With"),
                     Constants.sizedBoxHeight10,

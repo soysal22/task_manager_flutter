@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/view/add_task_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,6 +18,11 @@ class _HomePageState extends State<HomePage> {
         child: Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: GestureDetector(
+            onTap: () {
+              ThemeService().switchTheme();
+            },
+            child: Icon(Icons.sunny)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
