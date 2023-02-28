@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:manger_mission/core/constants/constants.dart';
 
 class MyButton extends StatelessWidget {
-  const MyButton({super.key});
+  final String? title;
+  final Function()? onPressed;
+  const MyButton({super.key, required this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
+            padding: const EdgeInsets.all(25)),
+        onPressed: onPressed,
+        child: Center(child: Text(title ?? "empty")));
   }
 }

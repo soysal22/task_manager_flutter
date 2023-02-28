@@ -19,7 +19,7 @@ class Constants {
   static const Color colorRed = Colors.red;
   static const Color colorBlue = Colors.blue;
   static const Color colorBlack = Colors.black;
-  static const Color colorGreen = Color.fromARGB(172, 14, 201, 185);
+  static const Color colorYellow = Colors.yellow;
 
   // Padding
   static const EdgeInsets paddingAll10 = EdgeInsets.all(10);
@@ -32,11 +32,13 @@ class Constants {
 //Sizedbox
 
   // Height
-  static const SizedBox sizedBoxHeight20 = SizedBox(height: 20);
+
+  static const SizedBox sizedBoxHeight0 = SizedBox(height: 0);
+  static const SizedBox sizedBoxHeight8 = SizedBox(height: 8);
   static const SizedBox sizedBoxHeight10 = SizedBox(height: 10);
-  static const SizedBox sizedBoxHeight5 = SizedBox(height: 5);
+  static const SizedBox sizedBoxHeight20 = SizedBox(height: 20);
 
   //   Width
 
-  static const SizedBox sizedBoxWidth10 = SizedBox(height: 10);
+  static const SizedBox sizedBoxWidth10 = SizedBox(width: 10);
 }

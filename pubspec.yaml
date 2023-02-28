@@ -31,8 +31,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: any
+  intl:
+  google_fonts:
+  date_picker_timeline:  
+  get: 
   get_storage: 
+  flutter_local_notifications: 
+  flutter_native_timezone: 
+   
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -62,7 +68,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+   - assets/images/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
