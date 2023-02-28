@@ -63,62 +63,65 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 _timeBar(),
                 _remindBar(),
                 _repeatBar(),
-
-                Padding(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Color",
-                            style: titleStyle,
-                          ),
-                          Constants.sizedBoxHeight8,
-                          Wrap(
-                            spacing: 8,
-                            children: List<Widget>.generate(3, (index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedColor = index;
-                                  });
-                                },
-                                child: CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: index == 0
-                                      ? primaryColor
-                                      : index == 1
-                                          ? pinkColor
-                                          : Constants.colorYellow,
-                                  child: selectedColor == index
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Constants.colorWhite,
-                                          size: 16,
-                                        )
-                                      : Constants.sizedBoxHeight0,
-                                ),
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
-                      MyButton(
-                        title: "Create Task",
-                        onPressed: () {
-                          log("Task a Created ");
-                        },
-                      )
-                    ],
-                  ),
-                )
+                _colorBar(),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Padding _colorBar() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Color",
+                style: titleStyle,
+              ),
+              Constants.sizedBoxHeight8,
+              Wrap(
+                spacing: 8,
+                children: List<Widget>.generate(3, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedColor = index;
+                      });
+                    },
+                    child: CircleAvatar(
+                      radius: 14,
+                      backgroundColor: index == 0
+                          ? primaryColor
+                          : index == 1
+                              ? pinkColor
+                              : Constants.colorYellow,
+                      child: selectedColor == index
+                          ? const Icon(
+                              Icons.done,
+                              color: Constants.colorWhite,
+                              size: 16,
+                            )
+                          : Constants.sizedBoxHeight0,
+                    ),
+                  );
+                }),
+              ),
+            ],
+          ),
+          MyButton(
+            title: "Create Task",
+            onPressed: () {
+              log("Task a Created ");
+            },
+          )
+        ],
       ),
     );
   }
