@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
           MyButton(
             title: "+ Add Task",
             onPressed: () {
-              Get.to(const AddTaskPage());
+              Get.to(() => AddTaskPage());
             },
           ),
         ],
