@@ -1,4 +1,4 @@
-class ValidationMixin {
+class Validations {
   String? validateName(value) {
     if (value.length < 2) {
       return "Lütfen Geçerli Bir Name Giriniz  ";

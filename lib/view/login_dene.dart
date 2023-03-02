@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
+import 'package:manger_mission/core/widgets/google_button.dart';
 import 'package:manger_mission/view/home_page.dart';
 import 'package:manger_mission/view/register_page.dart';
 
@@ -36,21 +38,20 @@ class _LoginPageState extends State<LoginPage> {
       appBar: null,
       backgroundColor: Constants.colorWhite,
       extendBody: true,
-      body: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Expanded(
-                  flex: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [_title(context)],
-                  )),
-              Expanded(
-                flex: 8,
-                child: Column(
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: Get.width / 8, top: Get.height / 7),
+                  child: _title(context),
+                ),
+                Column(
                   children: [
                     _emailCardTextfield(),
                     Constants.sizedBoxHeight20,
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                     Constants.sizedBoxHeight10,
                     _greyText(context, "Or Login With"),
                     Constants.sizedBoxHeight10,
-                    _googleButton(context),
+                    const GoogleButton(),
                     Constants.sizedBoxHeight20,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -73,8 +74,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -113,51 +114,18 @@ class _LoginPageState extends State<LoginPage> {
         shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
         elevation: 5,
         child: CupertinoButton(
-          color: Constants.colorPurpleButton,
+          color: Constants.primaryColor,
           borderRadius: Constants.borderRadius15,
           onPressed: () async {
             if (formKey.currentState?.validate() == true) {
               Get.to(
                 duration: const Duration(seconds: 1),
                 curve: Curves.bounceOut,
-                const HomePage(),
+                () => const HomePage(),
               );
             }
           },
-          child: _buttonText(context, "Login", Constants.colorWhite),
-        ),
-      ),
-    );
-  }
-
-  Widget _googleButton(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
-        elevation: 5,
-        child: CupertinoButton(
-          color: Constants.colorWhite,
-          borderRadius: Constants.borderRadius15,
-          onPressed: () async {
-            Get.to(
-              duration: const Duration(seconds: 1),
-              curve: Curves.bounceOut,
-              const RegisterPage(),
-            );
-          },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.g_mobiledata,
-                size: 35,
-                color: Constants.colorPurpleButton,
-              ),
-              _buttonText(context, "Google", Constants.colorBlack),
-            ],
-          ),
+          child: Text("Login", style: buttonTextStyleWhite),
         ),
       ),
     );
@@ -193,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.only(left: 20),
         child: Center(
           child: TextFormField(
-            validator: ValidationMixin().validateEmailName,
+            validator: Validations().validateEmailName,
             keyboardType: TextInputType.emailAddress,
             controller: emailController,
             decoration: const InputDecoration(
@@ -218,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.only(left: 20),
         child: Center(
           child: TextFormField(
-            validator: ValidationMixin().validatePassword,
+            validator: Validations().validatePassword,
             keyboardType: TextInputType.name,
             obscureText: obscureText,
             controller: passwordController,
@@ -270,25 +238,14 @@ class _LoginPageState extends State<LoginPage> {
               ? Get.to(
                   duration: const Duration(seconds: 1),
                   curve: Curves.bounceOut,
-                  const RegisterPage(),
+                  () => const RegisterPage(),
                 )
               : null;
         },
         child: Text(
           title,
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              color: Constants.colorPurpleButton, fontWeight: FontWeight.bold),
+              color: Constants.primaryColor, fontWeight: FontWeight.bold),
         ));
-  }
-
-  Text _buttonText(BuildContext context, String title, Color color) {
-    return Text(
-      title,
-      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-            color: color,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-    );
   }
 }

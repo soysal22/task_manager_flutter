@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         height: 100,
         width: 80,
         initialSelectedDate: DateTime.now(),
-        selectionColor: primaryColor,
+        selectionColor: Constants.primaryColor,
         selectedTextColor: Constants.colorWhite,
         dateTextStyle: GoogleFonts.lato(
           textStyle: const TextStyle(

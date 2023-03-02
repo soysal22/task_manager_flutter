@@ -91,10 +91,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
           snackPosition: SnackPosition.TOP,
           icon: const Icon(
             Icons.warning_amber_outlined,
-            color: pinkColor,
+            color: Constants.pinkColor,
             size: 30,
           ),
-          colorText: pinkColor,
+          colorText: Constants.pinkColor,
           backgroundColor: Constants.colorWhite,
           "Problem var",
           "Lütfen Title veya Note kısmını kontrol ediniz");
@@ -142,9 +142,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: CircleAvatar(
                       radius: 14,
                       backgroundColor: index == 0
-                          ? primaryColor
+                          ? Constants.primaryColor
                           : index == 1
-                              ? pinkColor
+                              ? Constants.pinkColor
                               : Constants.colorYellow,
                       child: selectedColor == index
                           ? const Icon(

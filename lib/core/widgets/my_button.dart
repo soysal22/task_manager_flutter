@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/themes/themes.dart';
 
 class MyButton extends StatelessWidget {
   final String? title;
@@ -14,6 +15,10 @@ class MyButton extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
             padding: const EdgeInsets.all(25)),
         onPressed: onPressed,
-        child: Center(child: Text(title ?? "empty")));
+        child: Center(
+            child: Text(
+          title ?? "empty",
+          style: titleStyle,
+        )));
   }
 }

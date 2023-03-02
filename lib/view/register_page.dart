@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
-import 'package:manger_mission/view/login_page.dart';
+import 'package:manger_mission/view/login_dene.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -30,31 +30,33 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: Constants.colorWhite,
         appBar: _appBarDesign(),
         body: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(15),
           child: Form(
             key: registerFormKey,
-            child: Column(
-              children: [
-                _nameTextField(),
-                Constants.sizedBoxHeight20,
-                _emailTextfield(),
-                Constants.sizedBoxHeight20,
-                _passwordTextfield(),
-                Constants.sizedBoxHeight20,
-                _createButton(context),
-                Constants.sizedBoxHeight20,
-                _greyText(context, "Or Sign Up with"),
-                Constants.sizedBoxHeight20,
-                _googleButton(context),
-                Constants.sizedBoxHeight20,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _greyText(context, "You have an account? "),
-                    _siginButton(context)
-                  ],
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _nameTextField(),
+                  Constants.sizedBoxHeight20,
+                  _emailTextfield(),
+                  Constants.sizedBoxHeight20,
+                  _passwordTextfield(),
+                  Constants.sizedBoxHeight20,
+                  _createButton(context),
+                  Constants.sizedBoxHeight20,
+                  _greyText(context, "Or Sign Up with"),
+                  Constants.sizedBoxHeight20,
+                  _googleButton(context),
+                  Constants.sizedBoxHeight20,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _greyText(context, "You have an account? "),
+                      _siginButton(context)
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -65,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
 // google giriş kısımlarıını ekle
   Widget _googleButton(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: Get.width,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
         elevation: 5,
@@ -86,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const Icon(
                 Icons.g_mobiledata,
                 size: 35,
-                color: Constants.colorPurpleButton,
+                color: Constants.primaryColor,
               ),
               _buttonText(context, "Google", Constants.colorBlack),
             ],
@@ -99,12 +101,12 @@ class _RegisterPageState extends State<RegisterPage> {
   TextButton _siginButton(BuildContext context) {
     return TextButton(
         onPressed: () {
-          Get.to(const LoginPage());
+          Get.back();
         },
         child: Text(
           "Sign In",
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              color: Constants.colorPurpleButton, fontWeight: FontWeight.bold),
+              color: Constants.primaryColor, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -120,9 +122,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _createButton(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: Get.width,
       child: CupertinoButton(
-        color: Constants.colorPurpleButton,
+        color: Constants.primaryColor,
         onPressed: () async {
           if (registerFormKey.currentState?.validate() == true) {
             Get.to(
@@ -149,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Card _nameTextField() {
     return Card(
       child: TextFormField(
-        validator: ValidationMixin().validateName,
+        validator: Validations().validateName,
         keyboardType: TextInputType.name,
         controller: registerNameController,
         decoration: const InputDecoration(
@@ -168,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Card _emailTextfield() {
     return Card(
       child: TextFormField(
-        validator: ValidationMixin().validateEmailName,
+        validator: Validations().validateEmailName,
         keyboardType: TextInputType.emailAddress,
         controller: registerEmailController,
         decoration: const InputDecoration(
@@ -187,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Card _passwordTextfield() {
     return Card(
       child: TextFormField(
-        validator: ValidationMixin().validatePassword,
+        validator: Validations().validatePassword,
         keyboardType: TextInputType.name,
         obscureText: registerObscureText,
         controller: registerPasswordController,

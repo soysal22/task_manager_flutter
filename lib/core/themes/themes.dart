@@ -3,22 +3,14 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 
-const Color blusihColor = Color(0xFF4e5ae8);
-const Color yellowColor = Color(0xFFFFB746);
-const Color pinkColor = Color(0xFFff4667);
-const Color white = Colors.white;
-const Color primaryColor = blusihColor;
-const Color darkGreyColor = Color(0xFF121212);
-const Color darkHeaderColor = Color(0xFF424242);
-
 class Themes {
   static final light = ThemeData(
-      backgroundColor: white,
-      primaryColor: primaryColor,
+      backgroundColor: Constants.colorWhite,
+      primaryColor: Constants.primaryColor,
       brightness: Brightness.light);
   static final dark = ThemeData(
-      backgroundColor: darkGreyColor,
-      primaryColor: darkGreyColor,
+      backgroundColor: Constants.darkGreyColor,
+      primaryColor: Constants.darkGreyColor,
       brightness: Brightness.dark);
 }
 
@@ -94,5 +86,23 @@ TextStyle get subtitleStyle {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: Get.isDarkMode ? Colors.grey[100] : Colors.grey[400],
+  ));
+}
+
+TextStyle get buttonTextStyleWhite {
+  return GoogleFonts.lato(
+      textStyle: const TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: Constants.colorWhite,
+  ));
+}
+
+TextStyle get buttonTextStyleBlack {
+  return GoogleFonts.lato(
+      textStyle: TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
   ));
 }
