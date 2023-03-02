@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/controllers/task_controller.dart';
+import 'package:manger_mission/core/models/add_task_model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/my_input_field.dart';
+import 'package:manger_mission/view/home_page.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
@@ -25,6 +28,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
 
+  final TaskController taskController = Get.put(TaskController());
+
   final TextEditingController? titleEditingController = TextEditingController();
   final TextEditingController? noteEditingController = TextEditingController();
 
@@ -33,7 +38,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: context.theme.backgroundColor,
-        appBar: _appBarDEsign(context),
+        appBar: _appBarDesign(context),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -61,59 +66,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 _timeBar(),
                 _remindBar(),
                 _repeatBar(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Color",
-                            style: titleStyle,
-                          ),
-                          Constants.sizedBoxHeight8,
-                          Wrap(
-                            spacing: 8,
-                            children: List<Widget>.generate(3, (index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedColor = index;
-                                  });
-                                },
-                                child: CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: index == 0
-                                      ? primaryColor
-                                      : index == 1
-                                          ? pinkColor
-                                          : Constants.colorYellow,
-                                  child: selectedColor == index
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Constants.colorWhite,
-                                          size: 16,
-                                        )
-                                      : Constants.sizedBoxHeight0,
-                                ),
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
-                      MyButton(
-                        title: "Create Task",
-                        onPressed: () {
-                          _validate();
-                          log("Task a Created ");
-                          Get.back();
-                        },
-                      )
-                    ],
-                  ),
-                ),
+                _colorPalette(),
               ],
             ),
           ),
@@ -122,21 +75,99 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  _validate() {
+  _validate() async {
     if (titleEditingController!.text.isNotEmpty &&
         noteEditingController!.text.isNotEmpty) {
       //  buraya yadıklarımmızı kaydedeceğimiz
 
       // add to database
+
+      _addTaskDb();
+      log("Task a Created ");
+      await Get.to(() => const HomePage());
     } else if (titleEditingController!.text.isEmpty ||
         noteEditingController!.text.isEmpty) {
       Get.snackbar(
           snackPosition: SnackPosition.TOP,
-          icon: const Icon(Icons.warning_amber_outlined),
+          icon: const Icon(
+            Icons.warning_amber_outlined,
+            color: pinkColor,
+            size: 30,
+          ),
+          colorText: pinkColor,
           backgroundColor: Constants.colorWhite,
           "Problem var",
           "Lütfen Title veya Note kısmını kontrol ediniz");
     }
+  }
+
+  void _addTaskDb() async {
+    taskController.AddTask(
+        task: AddTaskModel(
+      title: titleEditingController?.text,
+      note: noteEditingController?.text,
+      date: DateFormat.yMd().format(selectedDate),
+      startTime: startTime,
+      endTime: endTime,
+      remind: selectedRemind,
+      repeat: selectedRepeat,
+      color: selectedColor,
+      isCompleted: 0,
+    ));
+  }
+
+  Padding _colorPalette() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Color",
+                style: titleStyle,
+              ),
+              Constants.sizedBoxHeight8,
+              Wrap(
+                spacing: 8,
+                children: List<Widget>.generate(3, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedColor = index;
+                      });
+                    },
+                    child: CircleAvatar(
+                      radius: 14,
+                      backgroundColor: index == 0
+                          ? primaryColor
+                          : index == 1
+                              ? pinkColor
+                              : Constants.colorYellow,
+                      child: selectedColor == index
+                          ? const Icon(
+                              Icons.done,
+                              color: Constants.colorWhite,
+                              size: 16,
+                            )
+                          : Constants.sizedBoxHeight0,
+                    ),
+                  );
+                }),
+              ),
+            ],
+          ),
+          MyButton(
+            title: "Create Task",
+            onPressed: () async {
+              await _validate();
+            },
+          )
+        ],
+      ),
+    );
   }
 
   MyInputField _repeatBar() {
@@ -241,7 +272,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  AppBar _appBarDEsign(BuildContext context) {
+  AppBar _appBarDesign(BuildContext context) {
     return AppBar(
       elevation: 0,
       backgroundColor: context.theme.backgroundColor,

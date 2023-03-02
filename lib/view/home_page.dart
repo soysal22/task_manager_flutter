@@ -39,7 +39,10 @@ class _HomePageState extends State<HomePage> {
       extendBody: true,
       appBar: _appBarDesign(),
       body: Column(
-        children: [_addTaskBar(), _addDateBar()],
+        children: [
+          _addTaskBar(),
+          _addDateBar(),
+        ],
       ),
     ));
   }
@@ -102,8 +105,8 @@ class _HomePageState extends State<HomePage> {
           ),
           MyButton(
             title: "+ Add Task",
-            onPressed: () {
-              Get.to(() => AddTaskPage());
+            onPressed: () async {
+              await Get.to(() => const AddTaskPage());
             },
           ),
         ],
