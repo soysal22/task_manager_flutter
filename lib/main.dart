@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/core/themes/themes.dart';
-import 'package:manger_mission/view/login_dene.dart';
+import 'package:manger_mission/view/register_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
