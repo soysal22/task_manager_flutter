@@ -33,12 +33,10 @@ class MyInputField extends StatelessWidget {
             height: 50, //Get.width / 8
             width: Get.width,
             decoration: BoxDecoration(
-              //color: Constants.colorGrey,
               border: Border.all(color: Constants.colorGrey, width: 1.0),
               borderRadius: Constants.borderRadius15,
             ),
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                     child: TextFormField(

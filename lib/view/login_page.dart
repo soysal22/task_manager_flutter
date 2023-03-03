@@ -18,11 +18,6 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-// final LoginController textFieldController = Get.put(LoginController());
-// final CheckBoxController checkboxController = Get.put(CheckBoxController());
-// final ObsourceTextController obsourcetext = Get.put(ObsourceTextController());
-// final TodosApiPostService serviceController = Get.put(TodosApiPostService());
-
 TextEditingController emailController = TextEditingController();
 
 TextEditingController passwordController = TextEditingController();

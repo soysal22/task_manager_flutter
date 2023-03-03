@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
 }
  */
 
-TextStyle get subHeadinfgStyle {
+TextStyle get subHeadingStyle {
   return GoogleFonts.lato(
       textStyle: TextStyle(
     fontSize: 20,
@@ -68,6 +68,24 @@ TextStyle get headingStyle {
     fontSize: 30,
     fontWeight: FontWeight.bold,
     color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
+  ));
+}
+
+TextStyle get textHeadingStyle {
+  return GoogleFonts.lato(
+      textStyle: TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
+  ));
+}
+
+TextStyle get inputStyle {
+  return GoogleFonts.lato(
+      textStyle: const TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+    color: Constants.colorBlack,
   ));
 }
 
@@ -104,5 +122,14 @@ TextStyle get buttonTextStyleBlack {
     fontSize: 22,
     fontWeight: FontWeight.bold,
     color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
+  ));
+}
+
+TextStyle get titleStyleWhite {
+  return GoogleFonts.lato(
+      textStyle: const TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Constants.colorWhite,
   ));
 }

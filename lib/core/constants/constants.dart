@@ -30,7 +30,6 @@ class Constants {
   // Padding
   static const EdgeInsets paddingAll10 = EdgeInsets.all(10);
   static const EdgeInsets paddingLeft20 = EdgeInsets.only(left: 20);
-
 // Circular
 
   static BorderRadius borderRadius10 = BorderRadius.circular(10);

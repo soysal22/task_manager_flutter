@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
-import 'package:manger_mission/view/login_dene.dart';
+import 'package:manger_mission/core/widgets/google_button.dart';
+import 'package:manger_mission/view/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -14,10 +16,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 TextEditingController registerNameController = TextEditingController();
-
 TextEditingController registerEmailController = TextEditingController();
-
 TextEditingController registerPasswordController = TextEditingController();
+
 bool registerObscureText = true;
 
 final registerFormKey = GlobalKey<FormState>();
@@ -27,10 +28,10 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Constants.colorWhite,
+        backgroundColor: context.theme.backgroundColor,
         appBar: _appBarDesign(),
         body: Padding(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: Form(
             key: registerFormKey,
             child: SingleChildScrollView(
@@ -46,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Constants.sizedBoxHeight20,
                   _greyText(context, "Or Sign Up with"),
                   Constants.sizedBoxHeight20,
-                  _googleButton(context),
+                  const GoogleButton(),
                   Constants.sizedBoxHeight20,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,40 +59,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-// google giriş kısımlarıını ekle
-  Widget _googleButton(BuildContext context) {
-    return SizedBox(
-      width: Get.width,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
-        elevation: 5,
-        child: CupertinoButton(
-          color: Constants.colorWhite,
-          borderRadius: Constants.borderRadius15,
-          onPressed: () async {
-            Get.to(
-              duration: const Duration(seconds: 1),
-              curve: Curves.bounceOut,
-              () {},
-            );
-          },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.g_mobiledata,
-                size: 35,
-                color: Constants.primaryColor,
-              ),
-              _buttonText(context, "Google", Constants.colorBlack),
-            ],
           ),
         ),
       ),
@@ -115,6 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
       title,
       style: const TextStyle(
         fontSize: 18,
+        fontWeight: FontWeight.bold,
         color: Constants.colorGrey,
       ),
     );
@@ -150,6 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Card _nameTextField() {
     return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
       child: TextFormField(
         validator: Validations().validateName,
         keyboardType: TextInputType.name,
@@ -159,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
             border: InputBorder.none,
             hintText: "Please Write to a Name Ex: ibrahim ",
             suffixIcon: Icon(
-              Icons.email_sharp,
+              Icons.person,
               size: 30,
             ),
             labelText: "Name"),
@@ -169,6 +139,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Card _emailTextfield() {
     return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
       child: TextFormField(
         validator: Validations().validateEmailName,
         keyboardType: TextInputType.emailAddress,
@@ -188,40 +160,44 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Card _passwordTextfield() {
     return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
       child: TextFormField(
         validator: Validations().validatePassword,
         keyboardType: TextInputType.name,
         obscureText: registerObscureText,
         controller: registerPasswordController,
         decoration: InputDecoration(
-            contentPadding: Constants.paddingLeft20,
-            border: InputBorder.none,
-            hintText: "Please Write to a Password ",
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  registerObscureText = !registerObscureText;
-                  log("obscureText in değeri  :  $registerObscureText");
-                });
-              },
-              child: registerObscureText == true
-                  ? const Icon(
-                      Icons.remove_red_eye,
-                      size: 30,
-                    )
-                  : const Icon(
-                      Icons.close_rounded,
-                      size: 30,
-                    ),
-            ),
-            labelText: "Passsword "),
+          contentPadding: Constants.paddingLeft20,
+          border: InputBorder.none,
+          hintText: "Please Write to a Password ",
+          labelText: "Password",
+          suffixIcon: GestureDetector(
+            onTap: () {
+              setState(() {
+                registerObscureText = !registerObscureText;
+                log("obscureText in değeri  :  $registerObscureText");
+              });
+            },
+            child: registerObscureText == true
+                ? const Icon(
+                    Icons.remove_red_eye,
+                    size: 30,
+                  )
+                : const Icon(
+                    Icons.close_rounded,
+                    size: 30,
+                  ),
+          ),
+        ),
       ),
     );
   }
 
   AppBar _appBarDesign() {
     return AppBar(
-      backgroundColor: Constants.colorWhite,
+      toolbarHeight: Get.width / 2.5,
+      backgroundColor: context.theme.backgroundColor,
       elevation: 0,
       automaticallyImplyLeading: false,
       leading: GestureDetector(
@@ -233,9 +209,9 @@ class _RegisterPageState extends State<RegisterPage> {
             color: Constants.colorBlack,
           )),
       centerTitle: true,
-      title: const Text(
+      title: Text(
         Constants.textCreateAccount,
-        style: TextStyle(color: Constants.colorBlack),
+        style: textHeadingStyle,
       ),
     );
   }

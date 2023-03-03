@@ -20,13 +20,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var notifyHelper;
+  var notifyHelper = NotifyHelper();
 
   DateTime selectedDate = DateTime.now();
   @override
   void initState() {
     super.initState();
-    notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
   }
@@ -42,8 +41,21 @@ class _HomePageState extends State<HomePage> {
         children: [
           _addTaskBar(),
           _addDateBar(),
+          _showTask(),
         ],
       ),
+    ));
+  }
+
+  _showTask() {
+    return Expanded(child: Obx(
+      () {
+        return ListView.builder(
+          itemBuilder: (_, index) {
+            return Container();
+          },
+        );
+      },
     ));
   }
 
@@ -95,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text(
                 DateFormat.yMMMMd().format(DateTime.now()),
-                style: subHeadinfgStyle,
+                style: subHeadingStyle,
               ),
               Text(
                 "Today",
@@ -138,10 +150,11 @@ class _HomePageState extends State<HomePage> {
             ThemeService().switchTheme();
 
             notifyHelper.displayNotification(
-                title: "Theme Changed",
-                body: Get.isDarkMode
-                    ? "Activeted Dark theme"
-                    : "Activeted light theme");
+              title: "Theme Changed",
+              body: Get.isDarkMode
+                  ? "Activeted Dark theme"
+                  : "Activeted light theme",
+            );
             notifyHelper.scheduledNotification();
           },
           icon: Icon(

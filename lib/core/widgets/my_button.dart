@@ -11,6 +11,7 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
+            backgroundColor: Constants.primaryColor,
             shape:
                 RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
             padding: const EdgeInsets.all(25)),
@@ -18,7 +19,7 @@ class MyButton extends StatelessWidget {
         child: Center(
             child: Text(
           title ?? "empty",
-          style: titleStyle,
+          style: titleStyleWhite,
         )));
   }
 }

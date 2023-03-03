@@ -20,8 +20,9 @@ class GoogleButton extends StatelessWidget {
       },
       child: SizedBox(
         width: Get.width,
+        height: 60,
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius15),
+          shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
           elevation: 5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
