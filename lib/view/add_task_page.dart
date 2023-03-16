@@ -1,11 +1,11 @@
-// ignore_for_file: must_be_immutable, use_build_context_synchronously, avoid_print
+// ignore_for_file: must_be_immutable, use_build_context_synchronously, avoid_print, deprecated_member_use
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
-import 'package:manger_mission/core/models/add_task_model.dart';
+import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/my_input_field.dart';
@@ -84,7 +84,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
       _addTaskDb();
       log("Task a Created ");
-      await Get.to(() => const HomePage());
+      Get.back();
     } else if (titleEditingController!.text.isEmpty ||
         noteEditingController!.text.isEmpty) {
       Get.snackbar(
@@ -103,7 +103,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   void _addTaskDb() async {
     taskController.AddTask(
-        task: AddTaskModel(
+        task: TaskModel(
       title: titleEditingController?.text,
       note: noteEditingController?.text,
       date: DateFormat.yMd().format(selectedDate),

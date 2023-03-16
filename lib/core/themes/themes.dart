@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,9 +7,10 @@ import 'package:manger_mission/core/constants/constants.dart';
 
 class Themes {
   static final light = ThemeData(
-      backgroundColor: Constants.colorWhite,
-      primaryColor: Constants.primaryColor,
-      brightness: Brightness.light);
+    backgroundColor: Constants.colorWhite,
+    primaryColor: Constants.blusihColor,
+    brightness: Brightness.light,
+  );
   static final dark = ThemeData(
       backgroundColor: Constants.darkGreyColor,
       primaryColor: Constants.darkGreyColor,

@@ -8,7 +8,6 @@ class Constants {
 
 // TEXTS
 
-  static const String LOGIN_URL = "";
   static const String textCreateAccount = "Create Account";
 
 // Colors
@@ -16,7 +15,6 @@ class Constants {
   static const Color colorGrey = Colors.grey;
   static const Color colorWhite = Colors.white;
   static const Color colorRed = Colors.red;
-  static const Color colorBlue = Colors.blue;
   static const Color colorBlack = Colors.black;
   static const Color colorYellow = Colors.yellow;
 

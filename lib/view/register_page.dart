@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
   AppBar _appBarDesign() {
     return AppBar(
       toolbarHeight: Get.width / 2.5,
-      backgroundColor: context.theme.backgroundColor,
+      backgroundColor: context.theme.colorScheme.background,
       elevation: 0,
       automaticallyImplyLeading: false,
       leading: GestureDetector(

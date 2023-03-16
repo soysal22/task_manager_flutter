@@ -51,10 +51,12 @@ class MyInputField extends StatelessWidget {
                     hintStyle: subtitleStyle,
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                            width: 0, color: context.theme.backgroundColor)),
+                            width: 0,
+                            color: context.theme.colorScheme.background)),
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                            width: 0, color: context.theme.backgroundColor)),
+                            width: 0,
+                            color: context.theme.colorScheme.background)),
                   ),
                 )),
                 widget == null

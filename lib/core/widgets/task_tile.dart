@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manger_mission/core/constants/constants.dart';
-import 'package:manger_mission/core/models/add_task_model.dart';
+import 'package:manger_mission/core/models/task_model.dart';
 
 class TaskTile extends StatelessWidget {
-  final AddTaskModel? task;
+  final TaskModel? task;
   const TaskTile(this.task, {super.key});
 
   @override
@@ -12,7 +12,7 @@ class TaskTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(top: 12),
       child: Container(
         padding: const EdgeInsets.all(16),
         //  width: SizeConfig.screenWidth * 0.78,

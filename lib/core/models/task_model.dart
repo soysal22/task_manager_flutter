@@ -1,4 +1,4 @@
-class AddTaskModel {
+class TaskModel {
   int? id;
   String? title;
   String? note;
@@ -10,7 +10,7 @@ class AddTaskModel {
   int? remind;
   String? repeat;
 
-  AddTaskModel(
+  TaskModel(
       {this.id,
       this.title,
       this.note,
@@ -22,7 +22,7 @@ class AddTaskModel {
       this.remind,
       this.repeat});
 
-  AddTaskModel.fromJson(Map<String, dynamic> json) {
+  TaskModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     note = json['note'];
