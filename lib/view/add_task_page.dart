@@ -37,6 +37,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: GlobalKey(),
         backgroundColor: context.theme.backgroundColor,
         appBar: _appBarDesign(context),
         body: SingleChildScrollView(

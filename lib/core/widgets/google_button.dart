@@ -1,26 +1,30 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/users/google_sign_in.dart';
+import 'package:manger_mission/view/home_page.dart';
 
-class GoogleButton extends StatelessWidget {
+class GoogleButton extends StatefulWidget {
   const GoogleButton({super.key});
 
+  @override
+  State<GoogleButton> createState() => _GoogleButtonState();
+}
+
+class _GoogleButtonState extends State<GoogleButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.snackbar("Tasarım Aşamasındadır", "TO BE CONTUNİED",
-            snackPosition: SnackPosition.TOP,
-            icon: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: const Icon(Icons.warning_amber, size: 30)));
+        googleGiris();
       },
       child: SizedBox(
         width: Get.width,
-        height: 60,
+        height: Get.width / 7,
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: Constants.borderRadius10),
           elevation: 5,
@@ -48,5 +52,15 @@ class GoogleButton extends StatelessWidget {
       title,
       style: buttonTextStyleBlack,
     );
+  }
+
+  googleGiris() {
+    signInWithGoogle().then((value) {
+      if (FirebaseAuth.instance.currentUser != null) {
+        log("${FirebaseAuth.instance.currentUser!.displayName} Kullanıcısının Girişi Başarılı");
+        const Center(child: CircularProgressIndicator());
+        return Get.to(() => const HomePage());
+      }
+    });
   }
 }

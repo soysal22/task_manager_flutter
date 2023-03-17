@@ -1,22 +1,22 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print
-
-import 'dart:math';
-
+import 'dart:developer';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
-import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/service/notification_service.dart';
 import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/users/google_sign_in.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/task_tile.dart';
 import 'package:manger_mission/view/add_task_page.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:manger_mission/view/splash_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+      key: GlobalKey(),
       backgroundColor: context.theme.backgroundColor,
       extendBody: true,
       appBar: _appBarDesign(),
@@ -157,13 +158,30 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.only(top: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: AssetImage(
-                "assets/images/person.png",
-              ),
+          children: [
+            Text(
+              "Welcome ${FirebaseAuth.instance.currentUser?.displayName!}",
+              style: titleStyle,
             ),
+            Constants.sizedBoxWidth10,
+            const CircleAvatar(
+              radius: 25,
+              backgroundImage: AssetImage("assets/images/person.png"),
+            ),
+            Constants.sizedBoxWidth10,
+            IconButton(
+                onPressed: () {
+                  sigInOutWithGoogle();
+                  log("${FirebaseAuth.instance.currentUser?.displayName} Kullanıcısı Çıkış Yaptı");
+                  Get.to(() => const SplashScreen());
+                },
+                icon: Icon(
+                  Icons.power_settings_new_rounded,
+                  size: 35,
+                  color: Get.isDarkMode
+                      ? Constants.colorWhite
+                      : Constants.colorBlack,
+                ))
           ],
         ),
       ),

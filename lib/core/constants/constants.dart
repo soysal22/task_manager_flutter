@@ -6,6 +6,8 @@ class Constants {
 // IMAGES
   static const String imageGoogle = "assets/images/google_logo.png";
 
+  static const String imageSplash = "assets/images/splash.png";
+
 // TEXTS
 
   static const String textCreateAccount = "Create Account";

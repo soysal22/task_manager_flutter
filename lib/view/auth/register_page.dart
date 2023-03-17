@@ -8,7 +8,7 @@ import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
-import 'package:manger_mission/view/login_page.dart';
+import 'package:manger_mission/view/auth/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -30,6 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: GlobalKey(),
         backgroundColor: context.theme.backgroundColor,
         appBar: _appBarDesign(),
         body: Padding(
@@ -199,7 +200,7 @@ class _RegisterPageState extends State<RegisterPage> {
   AppBar _appBarDesign() {
     return AppBar(
       toolbarHeight: Get.width / 2.5,
-      backgroundColor: context.theme.colorScheme.background,
+      backgroundColor: context.theme.backgroundColor,
       elevation: 0,
       automaticallyImplyLeading: false,
       leading: GestureDetector(

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/core/themes/themes.dart';
-import 'package:manger_mission/view/home_page.dart';
+import 'package:manger_mission/view/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: Themes.light,
       darkTheme: Themes.dark,
       themeMode: ThemeService().theme,
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }
