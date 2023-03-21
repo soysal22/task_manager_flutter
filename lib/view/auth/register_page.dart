@@ -30,7 +30,6 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: GlobalKey(),
         backgroundColor: context.theme.backgroundColor,
         appBar: _appBarDesign(),
         body: Padding(

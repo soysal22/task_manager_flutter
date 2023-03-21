@@ -58,7 +58,7 @@ class _GoogleButtonState extends State<GoogleButton> {
     signInWithGoogle().then((value) {
       if (FirebaseAuth.instance.currentUser != null) {
         log("${FirebaseAuth.instance.currentUser!.displayName} Kullanıcısının Girişi Başarılı");
-        const Center(child: CircularProgressIndicator());
+
         return Get.to(() => const HomePage());
       }
     });

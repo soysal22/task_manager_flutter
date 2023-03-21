@@ -1,9 +1,12 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously, avoid_print, deprecated_member_use
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/controllers/deneme_task.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
@@ -11,14 +14,14 @@ import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/my_input_field.dart';
 import 'package:manger_mission/view/home_page.dart';
 
-class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+class DenemeAddPage extends StatefulWidget {
+  const DenemeAddPage({super.key});
 
   @override
-  State<AddTaskPage> createState() => _AddTaskPageState();
+  State<DenemeAddPage> createState() => _DenemeAddPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _DenemeAddPageState extends State<DenemeAddPage> {
   DateTime selectedDate = DateTime.now();
   String endTime = "09,30 PM";
   String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -28,7 +31,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
 
-  final TaskController taskController = Get.put(TaskController());
+  final DenemeTaskController taskController = Get.put(DenemeTaskController());
 
   final TextEditingController? titleEditingController = TextEditingController();
   final TextEditingController? noteEditingController = TextEditingController();
@@ -77,8 +80,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
         noteEditingController!.text.isNotEmpty) {
       // add to database    //  buraya yazdıklarımmızı kaydedeceğiz
       await _addTaskDb();
-
-      Get.to(() => const HomePage());
     } else if (titleEditingController!.text.isEmpty ||
         noteEditingController!.text.isEmpty) {
       Get.snackbar(
@@ -107,7 +108,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       repeat: selectedRepeat,
       color: selectedColor,
       isCompleted: 0,
-    ));
+    )).then((value) => Get.back());
   }
 
   Padding _colorPalette() {

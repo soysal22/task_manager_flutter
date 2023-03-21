@@ -5,7 +5,7 @@ import 'package:manger_mission/core/models/task_model.dart';
 
 class TaskTile extends StatelessWidget {
   final TaskModel? task;
-  const TaskTile(this.task, {super.key});
+  const TaskTile({required this.task, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class TaskTile extends StatelessWidget {
         //  width: SizeConfig.screenWidth * 0.78,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: _getBGClr(task?.color ?? 0),
+          color: _getBacgroundColor(task?.color ?? 0),
         ),
         child: Row(children: [
           Expanded(
@@ -88,7 +88,7 @@ class TaskTile extends StatelessWidget {
     );
   }
 
-  _getBGClr(int no) {
+  _getBacgroundColor(int no) {
     switch (no) {
       case 0:
         return Constants.blusihColor;
