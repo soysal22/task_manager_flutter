@@ -47,7 +47,7 @@ class TaskTile extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      "${task!.startTime} - ${task!.endTime}",
+                      "${task?.startTime} - ${task?.endTime}",
                       style: GoogleFonts.lato(
                         textStyle:
                             TextStyle(fontSize: 13, color: Colors.grey[100]),
@@ -69,12 +69,12 @@ class TaskTile extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 10),
             height: 60,
             width: 0.5,
-            color: Colors.grey[200]!.withOpacity(0.7),
+            color: Colors.grey[200]?.withOpacity(0.7),
           ),
           RotatedBox(
             quarterTurns: 3,
             child: Text(
-              task!.isCompleted == 1 ? "COMPLETED" : "TODO",
+              task?.isCompleted == 1 ? "COMPLETED" : "TODO",
               style: GoogleFonts.lato(
                 textStyle: const TextStyle(
                     fontSize: 10,

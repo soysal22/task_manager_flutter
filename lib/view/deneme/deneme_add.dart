@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
-import 'package:manger_mission/core/controllers/deneme_task.dart';
+import 'package:manger_mission/core/controllers/deneme_controller.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/themes/themes.dart';

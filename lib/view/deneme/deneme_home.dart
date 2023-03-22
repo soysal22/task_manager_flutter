@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
-import 'package:manger_mission/core/controllers/deneme_task.dart';
+import 'package:manger_mission/core/controllers/deneme_controller.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/service/notification_service.dart';
@@ -220,13 +220,21 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
             );
           }
 
+//gelen query snapshot verilerini document snopshot a çevirdik
+          List<DocumentSnapshot>? listOfDocumentSnap = snapshot.data?.docs;
+
+// gelen dosyayı kendi modeline me göre çevirip listeliyorum
+          List<TaskModel?> gelenTask = listOfDocumentSnap!
+              .map((e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
+              .toList();
+
+          log("document length : ${listOfDocumentSnap.length}");
           return Expanded(
-              child: ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              TaskModel ? data = document.data();
-                 
-              return TaskTile(task:data );
-            }).toList(),
+              child: ListView.builder(
+            itemCount: gelenTask.length,
+            itemBuilder: (context, index) {
+              return TaskTile(task: gelenTask[index]);
+            },
           ));
         });
   }

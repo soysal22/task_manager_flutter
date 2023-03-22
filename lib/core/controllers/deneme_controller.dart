@@ -19,7 +19,8 @@ class DenemeTaskController extends GetxController {
 
   // yeni  verileri eklemek için  bu fonksiyon kullanılıyor
 
-  Future<void> AddTask({TaskModel? task}) { //  BAŞARILI ÇALIŞIYOR 
+  Future<void> AddTask({TaskModel? task}) {
+    //  BAŞARILI ÇALIŞIYOR
     // Call the   Tasks CollectionReference to add a new Tasks
 
     return userCollectionRef
@@ -29,13 +30,13 @@ class DenemeTaskController extends GetxController {
   }
 
   // Kaydedilen  verileri çekmek için  bu fonksiyon kullanılıyor
+  List<TaskModel>? getList;
 
-  Future getTask() async {
-    //   TaskModel? task;
-    return userCollectionRef.get().then((value) {
-      log("Task Geldii");
-    }).catchError((error) => log("Failed to Task: $error"));
-
-    ;
+  Future<List<TaskModel>?> getTask() async {
+    final querySnapshot = await userCollectionRef.get();
+    getList =
+        querySnapshot.docs.map((e) => TaskModel.fromJson(e.data())).toList();
+    log(getList.toString());
+    return getList;
   }
 }
