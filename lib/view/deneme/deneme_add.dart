@@ -97,18 +97,20 @@ class _DenemeAddPageState extends State<DenemeAddPage> {
   }
 
   _addTaskDb() async {
-    await taskController.AddTask(
-        task: TaskModel(
-      title: titleEditingController?.text,
-      note: noteEditingController?.text,
-      date: DateFormat.yMd().format(selectedDate),
-      startTime: startTime,
-      endTime: endTime,
-      remind: selectedRemind,
-      repeat: selectedRepeat,
-      color: selectedColor,
-      isCompleted: 0,
-    )).then((value) => Get.back());
+    await taskController
+        .addTask(
+            task: TaskModel(
+          title: titleEditingController?.text,
+          note: noteEditingController?.text,
+          date: DateFormat.yMd().format(selectedDate),
+          startTime: startTime,
+          endTime: endTime,
+          remind: selectedRemind,
+          repeat: selectedRepeat,
+          color: selectedColor,
+          isCompleted: 0,
+        ))
+        .then((value) => Get.back());
   }
 
   Padding _colorPalette() {

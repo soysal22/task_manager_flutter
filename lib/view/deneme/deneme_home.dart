@@ -1,23 +1,18 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison
 import 'dart:developer';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/deneme_controller.dart';
-import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
-import 'package:manger_mission/core/service/notification_service.dart';
 import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/task_tile.dart';
-import 'package:manger_mission/view/add_task_page.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manger_mission/view/deneme/deneme_add.dart';
 
@@ -29,7 +24,7 @@ class DenemeHome extends StatefulWidget {
 }
 
 class _DenemeHomeState extends State<DenemeHome> {
-  var notifyHelper = NotifyHelper();
+//  var notifyHelper = NotifyHelper();
 
   DateTime selectedDate = DateTime.now();
 
@@ -197,9 +192,13 @@ final DenemeTaskController denemeTaskController =
 
 DateTime selectedDate = DateTime.now();
 
+String? deleteId;
+
+String? uid = FirebaseAuth.instance.currentUser?.uid;
+
 final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance
     .collection('kullanicilar')
-    .doc('S4dm6nRToftOjHFySnCM')
+    .doc(uid)
     .collection('tasks')
     .snapshots();
 
@@ -228,24 +227,134 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
               .map((e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
               .toList();
 
-          log("document length : ${listOfDocumentSnap.length}");
+          //  log("Tasks  length : ${listOfDocumentSnap.length}");
+          log("get List length : ${denemeTaskController.listTask?.length}");
           return Expanded(
-              child: ListView.builder(
-            itemCount: gelenTask.length,
-            itemBuilder: (context, index) {
-              return TaskTile(task: gelenTask[index]);
-            },
-          ));
+            child: FutureBuilder(
+              future: denemeTaskController.getTask(),
+              builder: (context, snapshot) {
+                return denemeTaskController.listTask!.isEmpty
+                    ? _hasntData()
+                    : ListView.builder(
+                        itemCount: denemeTaskController.listTask?.length,
+                        itemBuilder: (context, index) {
+                          deleteId = listOfDocumentSnap[index].reference.id;
+
+                          return GestureDetector(
+                              onTap: () {
+                                _showBottomSheet(context,
+                                    denemeTaskController.listTask?[index]);
+                              },
+                              child: TaskTile(
+                                  task: denemeTaskController.listTask?[index]));
+                        },
+                      );
+              },
+            ),
+          );
         });
   }
 
-  _showBottomSheet(BuildContext context, TaskModel task) {
-    return Get.bottomSheet(BottomSheet(
-      onClosing: () {},
-      builder: (context) {
-        return const Text("");
-      },
+  /** ListView.builder(
+            itemCount: denemeTaskController.getTask,
+            itemBuilder: (context, index) {
+              // var gelList = denemeTaskController.getList;
+              return GestureDetector(
+                  onDoubleTap: () async {
+                    log("Task refernece ${listOfDocumentSnap[index] // o dökümanın index ile hangisi olduğunu tutuyoruz zaten onun için delete fonk sktif ettikten sonra iş bitiyor
+                        .reference }");
+                    await listOfDocumentSnap[
+                            index] // o dökümanın index ile hangisi olduğunu tutuyoruz zaten onun için delete fonk sktif ettikten sonra iş bitiyor
+                        .reference
+                        .delete();
+                  },
+                  onTap: () {
+                    _showBottomSheet(
+                        context, denemeTaskController.listTask?[index]);
+                  },
+                  child: TaskTile(task: denemeTaskController.listTask?[index]));
+            },
+          )) */
+
+  _showBottomSheet(BuildContext? context, TaskModel? task) {
+    return Get.bottomSheet(Container(
+      padding: const EdgeInsets.only(top: 4),
+      height: task?.isCompleted == 1 ? Get.height * 0.24 : Get.height * 0.32,
+      color: Get.isDarkMode ? Constants.darkGreyColor : Constants.colorWhite,
+      child: Column(
+        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: 6,
+            width: 120,
+            decoration: BoxDecoration(
+              borderRadius: Constants.borderRadius10,
+              color: Get.isDarkMode
+                  ? Constants.colorGrey
+                  : Constants.darkHeaderColor,
+            ),
+          ),
+          const Spacer(),
+          task?.isCompleted == 1
+              ? Container()
+              : _bottomSheetButton(
+                  context: context,
+                  label: "Task Completed",
+                  onTap: () {
+                    Get.back();
+                  },
+                  color: Constants.primaryColor),
+          Constants.sizedBoxHeight10,
+          _bottomSheetButton(
+              context: context,
+              label: "Delete",
+              onTap: () async {
+                await denemeTaskController.deleteTask(deleteId);
+                Get.back();
+              },
+              color: Constants.colorRed),
+          Constants.sizedBoxHeight20,
+          _bottomSheetButton(
+            context: context,
+            label: "Close",
+            isClose: true,
+            onTap: () {
+              Get.back();
+            },
+          ),
+          Constants.sizedBoxHeight20,
+        ],
+      ),
     ));
+  }
+
+  _bottomSheetButton(
+      {BuildContext? context,
+      required String label,
+      required Function() onTap,
+      Color? color,
+      bool isClose = false}) {
+    return SizedBox(
+        width: Get.width * 0.9,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(15),
+              backgroundColor: isClose == true
+                  ? Get.isDarkMode
+                      ? Constants.colorBlack
+                      : Constants.colorWhite
+                  : color,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 2,
+                    color: isClose == true ? Constants.colorGrey : color!,
+                  ),
+                  borderRadius: Constants.borderRadius20)),
+          onPressed: onTap,
+          child: Center(
+            child: Text(label, style: titleStyle),
+          ),
+        ));
   }
 
   Padding _hasntData() {
@@ -254,18 +363,6 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TaskTile(
-              task: TaskModel(
-            title: " Sevgili Soysal",
-            note: " I LOVE YOU ",
-            date: DateFormat.yMd().format(selectedDate),
-            startTime: "startTime",
-            endTime: "endTime",
-            remind: 10,
-            repeat: "5",
-            color: 3,
-            isCompleted: 0,
-          )),
           const Icon(
             Icons.drafts_sharp,
             color: Constants.blusihColor,
@@ -273,7 +370,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           ),
           Constants.sizedBoxHeight20,
           Text(
-            "Kayıtlı bir veri yok ",
+            "Kayıtlı bir Task yok ",
             style: titleStyle,
           ),
         ],
