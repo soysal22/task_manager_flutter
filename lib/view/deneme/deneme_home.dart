@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison
+// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty
 import 'dart:developer';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,10 +11,12 @@ import 'package:manger_mission/core/controllers/deneme_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/users/google_sign_in.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/task_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manger_mission/view/deneme/deneme_add.dart';
+import 'package:manger_mission/view/splash_screen.dart';
 
 class DenemeHome extends StatefulWidget {
   const DenemeHome({super.key});
@@ -133,8 +135,7 @@ class _DenemeHomeState extends State<DenemeHome> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              // "Welcome ${FirebaseAuth.instance.currentUser?.displayName! ?? " empty "}",
-              "K.Name",
+              "Welcome ${FirebaseAuth.instance.currentUser?.displayName! ?? "K.Name"}",
               style: titleStyle,
             ),
             Constants.sizedBoxWidth10,
@@ -145,9 +146,10 @@ class _DenemeHomeState extends State<DenemeHome> {
             Constants.sizedBoxWidth10,
             IconButton(
                 onPressed: () {
-                  //sigInOutWithGoogle();
-                  //  log("${FirebaseAuth.instance.currentUser?.displayName} Kullanıcısı Çıkış Yaptı");
-                  //Get.to(() => const SplashScreen());
+                  sigInOutWithGoogle().then((value) {
+                    log("${FirebaseAuth.instance.currentUser?.displayName} Kullanıcısı Çıkış Yaptı");
+                    return Get.to(() => const SplashScreen());
+                  });
                 },
                 icon: Icon(
                   Icons.power_settings_new_rounded,
@@ -192,7 +194,7 @@ final DenemeTaskController denemeTaskController =
 
 DateTime selectedDate = DateTime.now();
 
-String? deleteId;
+String? deleteId = "";
 
 String? uid = FirebaseAuth.instance.currentUser?.uid;
 
@@ -223,9 +225,9 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           List<DocumentSnapshot>? listOfDocumentSnap = snapshot.data?.docs;
 
 // gelen dosyayı kendi modeline me göre çevirip listeliyorum
-          List<TaskModel?> gelenTask = listOfDocumentSnap!
-              .map((e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
-              .toList();
+          // List<TaskModel?> gelenTask = listOfDocumentSnap!
+          //     .map((e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
+          //     .toList();
 
           //  log("Tasks  length : ${listOfDocumentSnap.length}");
           log("get List length : ${denemeTaskController.listTask?.length}");
@@ -233,17 +235,17 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
             child: FutureBuilder(
               future: denemeTaskController.getTask(),
               builder: (context, snapshot) {
-                return denemeTaskController.listTask!.isEmpty
+                return denemeTaskController.listTask?.length == 0
                     ? _hasntData()
                     : ListView.builder(
                         itemCount: denemeTaskController.listTask?.length,
                         itemBuilder: (context, index) {
-                          deleteId = listOfDocumentSnap[index].reference.id;
-
                           return GestureDetector(
                               onTap: () {
                                 _showBottomSheet(context,
                                     denemeTaskController.listTask?[index]);
+                                deleteId =
+                                    listOfDocumentSnap?[index].reference.id;
                               },
                               child: TaskTile(
                                   task: denemeTaskController.listTask?[index]));
@@ -255,6 +257,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
         });
   }
 
+  // ignore: slash_for_doc_comments
   /** ListView.builder(
             itemCount: denemeTaskController.getTask,
             itemBuilder: (context, index) {

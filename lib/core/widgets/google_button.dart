@@ -1,12 +1,11 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/users/google_sign_in.dart';
-import 'package:manger_mission/view/home_page.dart';
+import 'package:manger_mission/view/deneme/deneme_home.dart';
 
 class GoogleButton extends StatefulWidget {
   const GoogleButton({super.key});
@@ -56,11 +55,10 @@ class _GoogleButtonState extends State<GoogleButton> {
 
   googleGiris() {
     signInWithGoogle().then((value) {
-      if (FirebaseAuth.instance.currentUser != null) {
-        log("${FirebaseAuth.instance.currentUser!.displayName} Kullanıcısının Girişi Başarılı");
+      log("${FirebaseAuth.instance.currentUser!.displayName} Kullanıcısının Girişi Başarılı");
 
-        return Get.to(() => const HomePage());
-      }
+      return Get.to(() => const DenemeHome());
+      //  if (FirebaseAuth.instance.currentUser != null) { }
     });
   }
 }

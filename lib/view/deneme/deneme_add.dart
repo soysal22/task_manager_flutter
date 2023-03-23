@@ -1,18 +1,14 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously, avoid_print, deprecated_member_use
 import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/deneme_controller.dart';
-import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/my_input_field.dart';
-import 'package:manger_mission/view/home_page.dart';
 
 class DenemeAddPage extends StatefulWidget {
   const DenemeAddPage({super.key});

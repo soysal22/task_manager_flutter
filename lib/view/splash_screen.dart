@@ -1,12 +1,11 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/view/auth/login_page.dart';
-import 'package:manger_mission/view/home_page.dart';
+import 'package:manger_mission/view/deneme/deneme_home.dart';
 
 bool isFirebaseInitialized = false;
 
@@ -32,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       isFirebaseInitialized = true;
       if (FirebaseAuth.instance.currentUser != null) {
         log(" ${FirebaseAuth.instance.currentUser!.displayName!} Kullanıcısı Giriş Yaptı");
-        Get.to(() => const HomePage());
+        Get.to(() => const DenemeHome());
       } else {
         Get.to(() => const LoginPage());
       }
@@ -45,7 +44,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          key: GlobalKey(),
           appBar: null,
           body: Center(
             child: Image.asset(
