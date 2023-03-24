@@ -28,6 +28,7 @@ class DenemeHome extends StatefulWidget {
 class _DenemeHomeState extends State<DenemeHome> {
 //  var notifyHelper = NotifyHelper();
 
+  String? userName = FirebaseAuth.instance.currentUser?.displayName ?? "empty";
   DateTime selectedDate = DateTime.now();
 
   final DenemeTaskController taskController = Get.put(DenemeTaskController());
@@ -147,7 +148,7 @@ class _DenemeHomeState extends State<DenemeHome> {
             IconButton(
                 onPressed: () {
                   sigInOutWithGoogle().then((value) {
-                    log("${FirebaseAuth.instance.currentUser?.displayName} Kullanıcısı Çıkış Yaptı");
+                    log("$userName Kullanıcısı Çıkış Yaptı");
                     return Get.to(() => const SplashScreen());
                   });
                 },
@@ -194,7 +195,10 @@ final DenemeTaskController denemeTaskController =
 
 DateTime selectedDate = DateTime.now();
 
-String? deleteId = "";
+String? deleteId;
+int? newCompleted;
+List<DocumentSnapshot>? listOfDocumentSnap;
+List<TaskModel>? gelenTask;
 
 String? uid = FirebaseAuth.instance.currentUser?.uid;
 
@@ -213,46 +217,50 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
           }
+          log(snapshot.connectionState.toString());
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Padding(
+            Padding(
               padding: EdgeInsets.only(top: Get.width / 4),
               child: const Center(child: CircularProgressIndicator()),
             );
           }
 
-//gelen query snapshot verilerini document snopshot a çevirdik
-          List<DocumentSnapshot>? listOfDocumentSnap = snapshot.data?.docs;
+          log("uid : $uid");
 
-// gelen dosyayı kendi modeline me göre çevirip listeliyorum
-          // List<TaskModel?> gelenTask = listOfDocumentSnap!
-          //     .map((e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
-          //     .toList();
+          try {
+            //gelen query snapshot verilerini document snopshot a çevirdik
 
+            listOfDocumentSnap = snapshot.data!.docs;
+
+            // gelen dosyayı kendi modeline me göre çevirip listeliyorum
+            gelenTask = listOfDocumentSnap!
+                .map(
+                    (e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
+                .toList();
+          } catch (e) {
+            log("error :  $e");
+          }
           //  log("Tasks  length : ${listOfDocumentSnap.length}");
           log("get List length : ${denemeTaskController.listTask?.length}");
+
+          log("gelen Task  length : ${gelenTask?.length}");
+
           return Expanded(
-            child: FutureBuilder(
-              future: denemeTaskController.getTask(),
-              builder: (context, snapshot) {
-                return denemeTaskController.listTask?.length == 0
-                    ? _hasntData()
-                    : ListView.builder(
-                        itemCount: denemeTaskController.listTask?.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () {
-                                _showBottomSheet(context,
-                                    denemeTaskController.listTask?[index]);
-                                deleteId =
-                                    listOfDocumentSnap?[index].reference.id;
-                              },
-                              child: TaskTile(
-                                  task: denemeTaskController.listTask?[index]));
-                        },
-                      );
-              },
-            ),
+            child: gelenTask?.length == 0
+                ? _hasntData()
+                : ListView.builder(
+                    itemCount: gelenTask?.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, gelenTask?[index]);
+                            deleteId = listOfDocumentSnap?[index].reference.id;
+                            newCompleted = gelenTask?[index].isCompleted = 1;
+                          },
+                          child: TaskTile(task: gelenTask?[index]));
+                    },
+                  ),
           );
         });
   }
@@ -303,7 +311,9 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
               : _bottomSheetButton(
                   context: context,
                   label: "Task Completed",
-                  onTap: () {
+                  onTap: () async {
+                    await denemeTaskController.taskCompleted(
+                        deleteId, newCompleted);
                     Get.back();
                   },
                   color: Constants.primaryColor),

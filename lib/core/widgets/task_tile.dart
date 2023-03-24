@@ -26,7 +26,7 @@ class TaskTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  task?.title ?? "",
+                  task?.title ?? "title yok ",
                   style: GoogleFonts.lato(
                     textStyle: const TextStyle(
                         fontSize: 16,
@@ -57,7 +57,7 @@ class TaskTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  task?.note ?? "",
+                  task?.note ?? "note yok ",
                   style: GoogleFonts.lato(
                     textStyle: TextStyle(fontSize: 15, color: Colors.grey[100]),
                   ),

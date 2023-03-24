@@ -67,4 +67,16 @@ class DenemeTaskController extends GetxController {
   //}
 
   // Kaydedilen  verileri çekmek için  bu fonksiyon kullanılıyor
+
+  Future taskCompleted(String? reference, int? newCompleted) async {
+    return await userCollectionRef
+        .doc(reference)
+        .set({'isCompleted': newCompleted}, SetOptions(merge: true)
+            // update ({'isCompleted': newCompleted}) bu şekilde yazmamız yeterli olur
+            // set yerine update fonksiyonunuda kullanabiliriz
+            // merge kodu sayesinde sadece değiştirmek istediğimiz yeri değiştirip diğer yerlerin sabit kalmasıısağlayabiliriz
+            )
+        .then((value) => log("Task Deleted"))
+        .catchError((error) => log("Failed to Task: $error"));
+  }
 }
