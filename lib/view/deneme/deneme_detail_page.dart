@@ -40,7 +40,7 @@ class DenemeDetail extends StatelessWidget {
               left: Get.width / 8,
               right: Get.width / 8),
           decoration: BoxDecoration(
-              color: Constants.colorGrey,
+              color: Constants.blusihColor,
               borderRadius: Constants.borderRadius20),
           child: Center(
               child: Text(

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty
+// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty, library_private_types_in_public_api
 import 'dart:developer';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +17,6 @@ import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/task_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manger_mission/view/deneme/deneme_add.dart';
-import 'package:manger_mission/view/deneme/deneme_detail_page.dart';
 import 'package:manger_mission/view/splash_screen.dart';
 
 class DenemeHome extends StatefulWidget {
@@ -28,12 +27,12 @@ class DenemeHome extends StatefulWidget {
 }
 
 class _DenemeHomeState extends State<DenemeHome> {
-//  var notifyHelper = NotifyHelper();
-
   String? userName = FirebaseAuth.instance.currentUser?.displayName ?? "empty";
   DateTime selectedDate = DateTime.now();
 
   final DenemeTaskController taskController = Get.put(DenemeTaskController());
+
+  //  var notifyHelper = NotifyHelper();
 
   // @override
   // void initState() {
@@ -53,7 +52,7 @@ class _DenemeHomeState extends State<DenemeHome> {
           _addTaskBar(),
           _addDateBar(),
 
-          // Firebase datasınıngeleceği yer
+          // Firebase datasının  geleceği yer
           const FirebaseGetData(),
         ],
       ),
@@ -188,7 +187,6 @@ class FirebaseGetData extends StatefulWidget {
   const FirebaseGetData({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _FirebaseGetDataState createState() => _FirebaseGetDataState();
 }
 
@@ -256,23 +254,29 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
                     itemBuilder: (context, index) {
                       TaskModel? task = gelenTask?[index];
                       log(task?.toJson().toString() ?? "task empty");
+                      //if (task?.date == DateFormat.yMd().format(selectedDate))
+
                       return AnimationConfiguration.staggeredList(
                           position: index,
                           child: FadeInAnimation(
+                              curve: Curves.easeInOut,
                               child: Row(
-                            children: [
-                              GestureDetector(
-                                  onTap: () {
-                                    _showBottomSheet(context, task);
-                                    deleteId =
-                                        listOfDocumentSnap?[index].reference.id;
-                                    newCompleted = task?.isCompleted = 1;
-                                  },
-                                  child: TaskTile(task: task)),
-                            ],
-                          )));
-                    },
-                  ),
+                                children: [
+                                  GestureDetector(
+                                      onTap: () {
+                                        _showBottomSheet(context, task);
+                                        deleteId = listOfDocumentSnap?[index]
+                                            .reference
+                                            .id;
+                                        setState(() {
+                                          newCompleted =
+                                              gelenTask?[index].isCompleted;
+                                        });
+                                      },
+                                      child: TaskTile(task: task)),
+                                ],
+                              )));
+                    }),
           );
         });
   }
@@ -305,40 +309,41 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
       height: task?.isCompleted == 1 ? Get.height * 0.24 : Get.height * 0.32,
       color: Get.isDarkMode ? Constants.darkGreyColor : Constants.colorWhite,
       child: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            height: 6,
-            width: 120,
-            decoration: BoxDecoration(
-              borderRadius: Constants.borderRadius10,
-              color: Get.isDarkMode
-                  ? Constants.colorGrey
-                  : Constants.darkHeaderColor,
-            ),
-          ),
+          _dividerBottomSheet(),
           const Spacer(),
+
+          // Completed  Button
           task?.isCompleted == 1
               ? Container()
               : _bottomSheetButton(
                   context: context,
                   label: "Task Completed",
                   onTap: () async {
-                    await denemeTaskController.taskCompleted(
-                        deleteId, newCompleted);
-                    Get.back();
+                    log("isCompleted ilk hali : ${task!.isCompleted}");
+
+                    task.isCompleted = 1;
+                    await denemeTaskController
+                        .taskCompleted(deleteId, task.isCompleted)
+                        .then((value) {
+                      Get.back();
+                      log("isCompleted son  hali : ${task.isCompleted}");
+                    });
                   },
                   color: Constants.primaryColor),
           Constants.sizedBoxHeight10,
+          // Delete Button
           _bottomSheetButton(
               context: context,
               label: "Delete",
               onTap: () async {
-                await denemeTaskController.deleteTask(deleteId);
-                Get.back();
+                await denemeTaskController.deleteTask(deleteId).then((value) {
+                  Get.back();
+                });
               },
               color: Constants.colorRed),
           Constants.sizedBoxHeight20,
+          // Close  Button
           _bottomSheetButton(
             context: context,
             label: "Close",
@@ -351,6 +356,17 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
         ],
       ),
     ));
+  }
+
+  Container _dividerBottomSheet() {
+    return Container(
+      height: 6,
+      width: 120,
+      decoration: BoxDecoration(
+        borderRadius: Constants.borderRadius10,
+        color: Get.isDarkMode ? Constants.colorGrey : Constants.darkHeaderColor,
+      ),
+    );
   }
 
   _bottomSheetButton(

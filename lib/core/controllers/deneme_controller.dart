@@ -67,6 +67,7 @@ class DenemeTaskController extends GetxController {
   // Kaydedilen  verileri çekmek için  bu fonksiyon kullanılıyor
 
   Future taskCompleted(String? reference, int? newCompleted) async {
+    log("newCompleted yeni hali :  $newCompleted");
     return await userCollectionRef
         .doc(reference)
         .update(
@@ -77,7 +78,7 @@ class DenemeTaskController extends GetxController {
           // set yerine update fonksiyonunuda kullanabiliriz
           // merge kodu sayesinde sadece değiştirmek istediğimiz yeri değiştirip diğer yerlerin sabit kalmasıısağlayabiliriz
         )
-        .then((value) => log("Task Deleted"))
+        .then((value) => log("Task  Completed"))
         .catchError((error) => log("Failed to Task: $error"));
   }
 }
