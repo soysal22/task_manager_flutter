@@ -72,7 +72,7 @@ class DenemeTaskController extends GetxController {
         .doc(reference)
         .update(
           {'isCompleted': newCompleted},
-          // Set({}) , bundan sonra set opstionsu kullanıyoruz
+          // Set({}) , bundan sonra set opstionsu kullanıyoruz ..
           // SetOptions(merge: true)
           // update ({'isCompleted': newCompleted}) bu şekilde yazmamız yeterli olur
           // set yerine update fonksiyonunuda kullanabiliriz
