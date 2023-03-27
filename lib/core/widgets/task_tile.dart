@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/models/task_model.dart';
+import 'package:manger_mission/view/deneme/deneme_detail_page.dart';
 
 class TaskTile extends StatelessWidget {
   final TaskModel? task;
@@ -31,45 +33,49 @@ class TaskTile extends StatelessWidget {
                     textStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        color: Constants.colorWhite),
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.access_time_rounded,
-                      color: Colors.grey[200],
-                      size: 18,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      "${task?.startTime} - ${task?.endTime}",
-                      style: GoogleFonts.lato(
-                        textStyle:
-                            TextStyle(fontSize: 13, color: Colors.grey[100]),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
+                Constants.sizedBoxHeight12,
+                _rowTimeTexts(),
+                Constants.sizedBoxHeight12,
                 Text(
                   task?.note ?? "note yok ",
                   style: GoogleFonts.lato(
-                    textStyle: TextStyle(fontSize: 15, color: Colors.grey[100]),
+                    textStyle:
+                        TextStyle(fontSize: 15, color: Constants.colorGrey100),
                   ),
                 ),
               ],
             ),
           ),
+          Expanded(
+              child: Column(
+            children: [
+              TextButton(
+                style: TextButton.styleFrom(
+                    side: const BorderSide(
+                        color: Constants.colorWhite, width: 2)),
+                onPressed: () {
+                  Get.to(() => DenemeDetail(
+                        task: task!,
+                      ));
+                },
+                child: Text(
+                  "Detail Page",
+                  style: GoogleFonts.lato(
+                    textStyle:
+                        TextStyle(fontSize: 15, color: Constants.colorGrey100),
+                  ),
+                ),
+              )
+            ],
+          )),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             height: 60,
             width: 0.5,
-            color: Colors.grey[200]?.withOpacity(0.7),
+            color: Constants.colorGrey200?.withOpacity(0.6),
           ),
           RotatedBox(
             quarterTurns: 3,
@@ -79,12 +85,32 @@ class TaskTile extends StatelessWidget {
                 textStyle: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                    color: Constants.colorWhite),
               ),
             ),
           ),
         ]),
       ),
+    );
+  }
+
+  Row _rowTimeTexts() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.access_time_rounded,
+          color: Constants.colorGrey200,
+          size: 18,
+        ),
+        Constants.sizedBoxWidth4,
+        Text(
+          "${task?.startTime} - ${task?.endTime}",
+          style: GoogleFonts.lato(
+            textStyle: TextStyle(fontSize: 13, color: Constants.colorGrey100),
+          ),
+        ),
+      ],
     );
   }
 

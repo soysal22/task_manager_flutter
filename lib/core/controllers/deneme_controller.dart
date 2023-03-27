@@ -32,14 +32,12 @@ class DenemeTaskController extends GetxController {
 
   // yeni  verileri eklemek için  bu fonksiyon kullanılıyor
 
-  Future<void> addTask({TaskModel? task}) {
+  Future<void> addTask({TaskModel? task}) async {
     //  BAŞARILI ÇALIŞIYOR
     // Call the   Tasks CollectionReference to add a new Tasks
 
     return userCollectionRef.add(task!.toJson()).then((value) {
       log("Task Added");
-
-      log("Task List  Length :  $listTask ");
     }).catchError((error) => log("Failed to Task: $error"));
   }
 
@@ -71,11 +69,14 @@ class DenemeTaskController extends GetxController {
   Future taskCompleted(String? reference, int? newCompleted) async {
     return await userCollectionRef
         .doc(reference)
-        .set({'isCompleted': newCompleted}, SetOptions(merge: true)
-            // update ({'isCompleted': newCompleted}) bu şekilde yazmamız yeterli olur
-            // set yerine update fonksiyonunuda kullanabiliriz
-            // merge kodu sayesinde sadece değiştirmek istediğimiz yeri değiştirip diğer yerlerin sabit kalmasıısağlayabiliriz
-            )
+        .update(
+          {'isCompleted': newCompleted},
+          // Set({}) , bundan sonra set opstionsu kullanıyoruz
+          // SetOptions(merge: true)
+          // update ({'isCompleted': newCompleted}) bu şekilde yazmamız yeterli olur
+          // set yerine update fonksiyonunuda kullanabiliriz
+          // merge kodu sayesinde sadece değiştirmek istediğimiz yeri değiştirip diğer yerlerin sabit kalmasıısağlayabiliriz
+        )
         .then((value) => log("Task Deleted"))
         .catchError((error) => log("Failed to Task: $error"));
   }

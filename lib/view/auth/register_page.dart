@@ -17,9 +17,10 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-TextEditingController registerNameController = TextEditingController();
-TextEditingController registerEmailController = TextEditingController();
-TextEditingController registerPasswordController = TextEditingController();
+final TextEditingController registerNameController = TextEditingController();
+final TextEditingController registerEmailController = TextEditingController();
+final TextEditingController registerPasswordController =
+    TextEditingController();
 
 bool registerObscureText = true;
 

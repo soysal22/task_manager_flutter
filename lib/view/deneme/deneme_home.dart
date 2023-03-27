@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +17,7 @@ import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/task_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manger_mission/view/deneme/deneme_add.dart';
+import 'package:manger_mission/view/deneme/deneme_detail_page.dart';
 import 'package:manger_mission/view/splash_screen.dart';
 
 class DenemeHome extends StatefulWidget {
@@ -231,7 +233,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           try {
             //gelen query snapshot verilerini document snopshot a çevirdik
 
-            listOfDocumentSnap = snapshot.data!.docs;
+            listOfDocumentSnap = snapshot.data?.docs;
 
             // gelen dosyayı kendi modeline me göre çevirip listeliyorum
             gelenTask = listOfDocumentSnap!
@@ -242,7 +244,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
             log("error :  $e");
           }
           //  log("Tasks  length : ${listOfDocumentSnap.length}");
-          log("get List length : ${denemeTaskController.listTask?.length}");
+          // log("get List length : ${denemeTaskController.listTask?.length}");
 
           log("gelen Task  length : ${gelenTask?.length}");
 
@@ -252,13 +254,23 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
                 : ListView.builder(
                     itemCount: gelenTask?.length,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, gelenTask?[index]);
-                            deleteId = listOfDocumentSnap?[index].reference.id;
-                            newCompleted = gelenTask?[index].isCompleted = 1;
-                          },
-                          child: TaskTile(task: gelenTask?[index]));
+                      TaskModel? task = gelenTask?[index];
+                      log(task?.toJson().toString() ?? "task empty");
+                      return AnimationConfiguration.staggeredList(
+                          position: index,
+                          child: FadeInAnimation(
+                              child: Row(
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    _showBottomSheet(context, task);
+                                    deleteId =
+                                        listOfDocumentSnap?[index].reference.id;
+                                    newCompleted = task?.isCompleted = 1;
+                                  },
+                                  child: TaskTile(task: task)),
+                            ],
+                          )));
                     },
                   ),
           );
