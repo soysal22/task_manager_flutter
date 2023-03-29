@@ -16,11 +16,11 @@ class DenemeTaskController extends GetxController {
           .doc(uid)
           .collection('tasks');
 
-  List<TaskModel>? listTask;
+  List listTask = [].obs;
 
   // yeni  verileri veya olan verileri getirmek için  bu fonksiyon kullanılıyor
 
-  Future<List<TaskModel>?> getTask() async {
+  Future<List> getTask() async {
     final querySnapshot = await userCollectionRef.get();
 
     listTask =
@@ -87,7 +87,7 @@ class DenemeTaskController extends GetxController {
 
   Future<void> addUser({AuthModel? authModel}) async {
     CollectionReference<Map<String, dynamic>> userRef =
-        FirebaseFirestore.instance.collection('userNew');
+        FirebaseFirestore.instance.collection('newUser');
 
     return userRef.add(authModel!.toJson()).then((value) {
       log("User Added");

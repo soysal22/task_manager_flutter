@@ -28,7 +28,7 @@ class DenemeHome extends StatefulWidget {
 
 class _DenemeHomeState extends State<DenemeHome> {
   String? userName =
-      AuthController.instance.auth.currentUser?.displayName ?? "empty";
+      AuthController.instance.auth.currentUser?.displayName ?? " U.Name ";
   DateTime selectedDate = DateTime.now();
 
   final DenemeTaskController taskController = Get.put(DenemeTaskController());
@@ -236,7 +236,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           try {
             //gelen query snapshot verilerini document snopshot a çevirdik
 
-            listOfDocumentSnap = snapshot.data?.docs;
+            listOfDocumentSnap = snapshot.data!.docs;
 
             // gelen dosyayı kendi modeline me göre çevirip listeliyorum
             gelenTask = listOfDocumentSnap!
@@ -309,9 +309,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           )) */
 
   _showBottomSheet(BuildContext? context, TaskModel? task) {
-    return Get.bottomSheet(
-      
-      Container(
+    return Get.bottomSheet(Container(
       padding: const EdgeInsets.only(top: 4),
       height: task?.isCompleted == 1 ? Get.height * 0.24 : Get.height * 0.32,
       color: Get.isDarkMode ? Constants.darkGreyColor : Constants.colorWhite,

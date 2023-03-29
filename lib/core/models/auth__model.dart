@@ -10,17 +10,17 @@ class AuthModel {
   });
 
   AuthModel.fromJson(Map<String, dynamic> json) {
-    name = json['title'];
-    email = json['note'];
-    password = json['date'];
+    name = json['name'];
+    email = json['email'];
+    password = json['password'];
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
-    data['title'] = name;
-    data['note'] = email;
-    data['date'] = password;
+    data['name'] = name;
+    data['email'] = email;
+    data['password'] = password;
 
     return data;
   }

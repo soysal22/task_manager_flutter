@@ -9,8 +9,6 @@ import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
-import 'package:manger_mission/core/widgets/google_button.dart';
-import 'package:manger_mission/view/home_page.dart';
 import 'package:manger_mission/view/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
