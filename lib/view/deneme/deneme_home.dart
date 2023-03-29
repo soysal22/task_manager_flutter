@@ -12,7 +12,7 @@ import 'package:manger_mission/core/controllers/deneme_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/core/themes/themes.dart';
-import 'package:manger_mission/core/users/google_sign_in.dart';
+import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/task_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,7 +27,8 @@ class DenemeHome extends StatefulWidget {
 }
 
 class _DenemeHomeState extends State<DenemeHome> {
-  String? userName = FirebaseAuth.instance.currentUser?.displayName ?? "empty";
+  String? userName =
+      AuthController.instance.auth.currentUser?.displayName ?? "empty";
   DateTime selectedDate = DateTime.now();
 
   final DenemeTaskController taskController = Get.put(DenemeTaskController());
@@ -137,7 +138,7 @@ class _DenemeHomeState extends State<DenemeHome> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              "Welcome ${FirebaseAuth.instance.currentUser?.displayName! ?? "K.Name"}",
+              "Welcome $userName",
               style: titleStyle,
             ),
             Constants.sizedBoxWidth10,
@@ -147,11 +148,15 @@ class _DenemeHomeState extends State<DenemeHome> {
             ),
             Constants.sizedBoxWidth10,
             IconButton(
-                onPressed: () {
-                  sigInOutWithGoogle().then((value) {
-                    log("$userName Kullanıcısı Çıkış Yaptı");
-                    return Get.to(() => const SplashScreen());
-                  });
+                onPressed: () async {
+                  try {
+                    await sigInOutWithGoogle().then((value) {
+                      log("$userName Kullanıcısı Çıkış Yaptı");
+                      return Get.to(() => const SplashScreen());
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
                 },
                 icon: Icon(
                   Icons.power_settings_new_rounded,
@@ -304,7 +309,9 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           )) */
 
   _showBottomSheet(BuildContext? context, TaskModel? task) {
-    return Get.bottomSheet(Container(
+    return Get.bottomSheet(
+      
+      Container(
       padding: const EdgeInsets.only(top: 4),
       height: task?.isCompleted == 1 ? Get.height * 0.24 : Get.height * 0.32,
       color: Get.isDarkMode ? Constants.darkGreyColor : Constants.colorWhite,

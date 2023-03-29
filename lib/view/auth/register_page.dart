@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/controllers/auth_controller.dart';
+import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
@@ -17,10 +19,9 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-final TextEditingController registerNameController = TextEditingController();
-final TextEditingController registerEmailController = TextEditingController();
-final TextEditingController registerPasswordController =
-    TextEditingController();
+final TextEditingController nameController = TextEditingController();
+final TextEditingController emailController = TextEditingController();
+final TextEditingController passwordController = TextEditingController();
 
 bool registerObscureText = true;
 
@@ -98,11 +99,11 @@ class _RegisterPageState extends State<RegisterPage> {
         color: Constants.primaryColor,
         onPressed: () async {
           if (registerFormKey.currentState?.validate() == true) {
-            Get.to(
-              duration: const Duration(seconds: 1),
-              curve: Curves.bounceOut,
-              const LoginPage(),
-            );
+            AuthController.instance.register(
+                authModel: AuthModel(
+                    name: nameController.text.trim(),
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim()));
           }
         },
         child: _buttonText(
@@ -126,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         validator: Validations().validateName,
         keyboardType: TextInputType.name,
-        controller: registerNameController,
+        controller: nameController,
         decoration: const InputDecoration(
             contentPadding: Constants.paddingLeft20,
             border: InputBorder.none,
@@ -147,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextFormField(
         validator: Validations().validateEmailName,
         keyboardType: TextInputType.emailAddress,
-        controller: registerEmailController,
+        controller: emailController,
         decoration: const InputDecoration(
             contentPadding: Constants.paddingLeft20,
             border: InputBorder.none,
@@ -169,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
         validator: Validations().validatePassword,
         keyboardType: TextInputType.name,
         obscureText: registerObscureText,
-        controller: registerPasswordController,
+        controller: passwordController,
         decoration: InputDecoration(
           contentPadding: Constants.paddingLeft20,
           border: InputBorder.none,

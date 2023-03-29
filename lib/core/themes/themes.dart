@@ -136,3 +136,12 @@ TextStyle get titleStyleWhite {
     color: Constants.colorWhite,
   ));
 }
+
+TextStyle get detailTitleStyle {
+  return GoogleFonts.lato(
+      textStyle: TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
+    color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
+  ));
+}

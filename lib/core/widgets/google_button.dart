@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/themes/themes.dart';
-import 'package:manger_mission/core/users/google_sign_in.dart';
+import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/view/deneme/deneme_home.dart';
 
 class GoogleButton extends StatefulWidget {

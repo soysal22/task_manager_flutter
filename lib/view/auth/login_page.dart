@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/controllers/auth_controller.dart';
+import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
@@ -43,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      bottom: Get.width / 8, top: Get.height / 7),
+                      bottom: Get.width / 5, top: Get.height / 7),
                   child: _title(context),
                 ),
                 Column(
@@ -54,11 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                     Constants.sizedBoxHeight20,
                     _rowCheckBoxAnfForgetText(context),
                     Constants.sizedBoxHeight20,
-                    _LoginButton(context),
-                    Constants.sizedBoxHeight10,
-                    _greyText(context, "Or Login With"),
-                    Constants.sizedBoxHeight10,
-                    const GoogleButton(),
+                    _loginButton(context),
                     Constants.sizedBoxHeight20,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _LoginButton(BuildContext context) {
+  Widget _loginButton(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Card(
@@ -113,11 +111,10 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: Constants.borderRadius15,
           onPressed: () async {
             if (formKey.currentState?.validate() == true) {
-              Get.to(
-                duration: const Duration(seconds: 1),
-                curve: Curves.bounceOut,
-                () => const HomePage(),
-              );
+              AuthController.instance.login(
+                  authModel: AuthModel(
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim()));
             }
           },
           child: Text("Login", style: buttonTextStyleWhite),
@@ -128,11 +125,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Row _rowCheckBoxAnfForgetText(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Row(
-          children: [_checkBox(), _rememberText(context)],
-        ),
+        // Row(
+        //   children: [
+        //     _checkBox(),
+        //     _rememberText(context)
+        //   ],
+        // ),
         _customTextButton(context, "Forgot to Password ?")
       ],
     );

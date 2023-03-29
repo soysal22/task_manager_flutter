@@ -16,7 +16,7 @@ class Validations {
   String? validateEmailName(value) {
     if (!value.contains("@")) {
       // emailin için @ harfi var mı yok mu diye teyit ettiriyorum
-      return "Email Geçersizdir Lütfen Tekrar Deneyiniz !";
+      return "Lütfen Geçerli Email Giriniz !";
     }
     return null;
   }
