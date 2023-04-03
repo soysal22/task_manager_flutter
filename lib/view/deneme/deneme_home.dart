@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty, library_private_types_in_public_api, unused_element
+// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty, library_private_types_in_public_api, unused_element, body_might_complete_normally_nullable
 import 'dart:developer';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +29,7 @@ class DenemeHome extends StatefulWidget {
 
 class _DenemeHomeState extends State<DenemeHome> {
   String? userName =
-      AuthController.instance.auth.currentUser?.displayName ?? " U.Name ";
+      FirebaseAuth.instance.currentUser?.displayName ?? " U.Name ";
   DateTime selectedDate = DateTime.now();
 
   final DenemeTaskController taskController = Get.put(DenemeTaskController());
@@ -226,7 +226,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           log(snapshot.connectionState.toString());
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            Padding(
+            return Padding(
               padding: EdgeInsets.only(top: Get.width / 4),
               child: const Center(child: CircularProgressIndicator()),
             );
@@ -253,73 +253,67 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           log("gelen Task  length : ${gelenTask?.length}");
 
           return Expanded(
-            child: gelenTask?.length == 0
+            child: gelenTask!.isEmpty
                 ? _hasntData()
                 : ListView.builder(
                     itemCount: gelenTask?.length,
                     itemBuilder: (context, index) {
                       TaskModel? task = gelenTask?[index];
                       log(task?.toJson().toString() ?? "task empty");
-                      if (task?.date ==
-                          DateFormat.yMd().format(selectedDate).toString()) {
-                        _cardParametrs(index, context, task);
-                      }
-                      if (gelenTask?[index].repeat == "Daily") {
-                        _cardParametrs(index, context, task);
-                      }
-                      return Dismissible(
-                          key: ObjectKey(index), child: Container());
+                      return AnimationConfiguration.staggeredList(
+                          position: index,
+                          child: FadeInAnimation(
+                            curve: Curves.easeInOut,
+                            child: Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showBottomSheet(context, task);
+                                  deleteId =
+                                      listOfDocumentSnap?[index].reference.id;
+                                },
+                                /** child: Slidable(
+                              // Specify a key if the Slidable is dismissible.
+                              key: const ValueKey(0),
+
+                              // The start action pane is the one at the left or the top side.
+                              startActionPane: ActionPane(
+                                // A motion is a widget used to control how the pane animates.
+                                motion: const ScrollMotion(),
+
+                                // A pane can dismiss the Slidable.
+                                dismissible:
+                                    DismissiblePane(onDismissed: () {}),
+
+                                // All actions are defined in the children parameter.
+                                children: [
+                                  // A SlidableAction can have an icon and/or a label.
+                                  SlidableAction(
+                                    onPressed: (context) async {
+                                      await denemeTaskController
+                                          .deleteTask(deleteId);
+                                    },
+                                    backgroundColor: const Color(0xFFFE4A49),
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Delete',
+                                  ),
+                                ],
+                              ), */
+
+                                child: TaskTile(task: task),
+                              ),
+                            ),
+                          ));
+                      // if (task?.date ==
+                      //     DateFormat.yMd().format(selectedDate).toString()) {
+                      //   _cardParametrs(index, context, task);
+                      // }
                     }),
           );
         });
   }
 
-  AnimationConfiguration _cardParametrs(
-      int index, BuildContext context, TaskModel? task) {
-    return AnimationConfiguration.staggeredList(
-        position: index,
-        child: FadeInAnimation(
-            curve: Curves.easeInOut,
-            child: Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  _showBottomSheet(context, task);
-                  deleteId = listOfDocumentSnap?[index].reference.id;
-                },
-                child: Slidable(
-                  // Specify a key if the Slidable is dismissible.
-                  key: const ValueKey(0),
-
-                  // The start action pane is the one at the left or the top side.
-                  startActionPane: ActionPane(
-                    // A motion is a widget used to control how the pane animates.
-                    motion: const ScrollMotion(),
-
-                    // A pane can dismiss the Slidable.
-                    dismissible: DismissiblePane(onDismissed: () {}),
-
-                    // All actions are defined in the children parameter.
-                    children: [
-                      // A SlidableAction can have an icon and/or a label.
-                      SlidableAction(
-                        onPressed: (context) async {
-                          await denemeTaskController.deleteTask(deleteId);
-                        },
-                        backgroundColor: const Color(0xFFFE4A49),
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        label: 'Delete',
-                      ),
-                    ],
-                  ),
-
-                  child: TaskTile(task: task),
-                ),
-              ),
-            )));
-  }
-
-  Future deletefunction(BuildContext context) async {
+  Future deletefunction() async {
     return await denemeTaskController.deleteTask(deleteId).then((value) {
       Get.back();
     });

@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/models/task_model.dart';
-import 'package:manger_mission/view/auth/login_page.dart';
 
 String? uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -88,13 +87,12 @@ class DenemeTaskController extends GetxController {
 
   // kullanici kaydı
 
-  Future<void> addUser({AuthModel? authModel}) async {
+  Future<void> addNewUser({AuthModel? authModel}) async {
     CollectionReference<Map<String, dynamic>> userRef =
         FirebaseFirestore.instance.collection('newUsers');
 
     return userRef.add(authModel!.toJson()).then((value) {
       log("User Added");
-      Get.to(() => const LoginPage());
     }).catchError((error) => log("Failed to User: $error"));
   }
 }

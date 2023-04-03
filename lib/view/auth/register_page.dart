@@ -91,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _createButton(BuildContext context) {
+  _createButton(BuildContext context) {
     return SizedBox(
       width: Get.width,
       child: CupertinoButton(
@@ -103,6 +103,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     name: nameController.text.trim(),
                     email: emailController.text.trim(),
                     password: passwordController.text.trim()));
+
+            nameController.clear();
+            emailController.clear();
+            passwordController.clear();
           }
         },
         child: _buttonText(
