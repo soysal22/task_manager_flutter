@@ -38,7 +38,8 @@ dependencies:
   get_storage: 
   flutter_local_notifications: 
  # flutter_native_timezone: any 
-  flutter_staggered_animations: 
+  flutter_staggered_animations:
+  flutter_slidable: 
 
 
 

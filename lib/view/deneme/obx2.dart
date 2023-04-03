@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty, library_private_types_in_public_api, unused_element
+// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty, library_private_types_in_public_api, unused_element, slash_for_doc_comments
 import 'dart:developer';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,14 +20,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manger_mission/view/deneme/deneme_add.dart';
 import 'package:manger_mission/view/splash_screen.dart';
 
-class DenemeHome extends StatefulWidget {
-  const DenemeHome({super.key});
+class ObxTwo extends StatefulWidget {
+  const ObxTwo({super.key});
 
   @override
-  State<DenemeHome> createState() => _DenemeHomeState();
+  State<ObxTwo> createState() => _ObxTwoState();
 }
 
-class _DenemeHomeState extends State<DenemeHome> {
+class _ObxTwoState extends State<ObxTwo> {
   String? userName =
       AuthController.instance.auth.currentUser?.displayName ?? " U.Name ";
   DateTime selectedDate = DateTime.now();
@@ -238,24 +238,53 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
             //gelen query snapshot verilerini document snopshot a çevirdik
 
             listOfDocumentSnap = snapshot.data!.docs;
-
-            // gelen dosyayı kendi modeline me göre çevirip listeliyorum
-            gelenTask = listOfDocumentSnap!
-                .map(
-                    (e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
-                .toList();
+            //   log("gelen Task  length : ${gelenTask?.length}");
+            // // gelen dosyayı kendi modeline me göre çevirip listeliyorum
+            // gelenTask = listOfDocumentSnap!
+            //     .map(
+            //         (e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
+            //     .toList();
           } catch (e) {
             log("error :  $e");
           }
           //  log("Tasks  length : ${listOfDocumentSnap.length}");
-          // log("get List length : ${denemeTaskController.listTask?.length}");
+          //   log("gelen Task  length : ${gelenTask?.length}");
 
-          log("gelen Task  length : ${gelenTask?.length}");
+          log("get List length : ${denemeTaskController.listTask?.length}");
 
           return Expanded(
-            child: gelenTask?.length == 0
+            child: denemeTaskController.listTask?.length == 0
                 ? _hasntData()
-                : ListView.builder(
+                : FutureBuilder(
+                    future: denemeTaskController.getTask(),
+                    builder: (context, snapshot) {
+                      return ListView.builder(
+                          itemCount: denemeTaskController.listTask?.length,
+                          itemBuilder: (context, index) {
+                            TaskModel? task =
+                                denemeTaskController.listTask?[index];
+                            log(task?.toJson().toString() ?? "task empty");
+
+                            // if (task?.date ==
+                            //     DateFormat.yMd()
+                            //         .format(selectedDate)
+                            //         .toString()) {
+                            //   _cardParametrs(index, context, task);
+                            // }
+                            // if (gelenTask?[index].repeat == "Daily") {
+                            //   _cardParametrs(index, context, task);
+                            // }
+                            // return Dismissible(
+                            //     key: ObjectKey(index), child: Container());
+                            return _cardParametrs(index, context, task);
+                          });
+                    },
+                  ),
+          );
+        });
+  }
+
+/**ListView.builder(
                     itemCount: gelenTask?.length,
                     itemBuilder: (context, index) {
                       TaskModel? task = gelenTask?[index];
@@ -269,11 +298,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
                       }
                       return Dismissible(
                           key: ObjectKey(index), child: Container());
-                    }),
-          );
-        });
-  }
-
+                    }) */
   AnimationConfiguration _cardParametrs(
       int index, BuildContext context, TaskModel? task) {
     return AnimationConfiguration.staggeredList(
@@ -324,28 +349,6 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
       Get.back();
     });
   }
-
-  // ignore: slash_for_doc_comments
-  /** ListView.builder(
-            itemCount: denemeTaskController.getTask,
-            itemBuilder: (context, index) {
-              // var gelList = denemeTaskController.getList;
-              return GestureDetector(
-                  onDoubleTap: () async {
-                    log("Task refernece ${listOfDocumentSnap[index] // o dökümanın index ile hangisi olduğunu tutuyoruz zaten onun için delete fonk sktif ettikten sonra iş bitiyor
-                        .reference }");
-                    await listOfDocumentSnap[
-                            index] // o dökümanın index ile hangisi olduğunu tutuyoruz zaten onun için delete fonk sktif ettikten sonra iş bitiyor
-                        .reference
-                        .delete();
-                  },
-                  onTap: () {
-                    _showBottomSheet(
-                        context, denemeTaskController.listTask?[index]);
-                  },
-                  child: TaskTile(task: denemeTaskController.listTask?[index]));
-            },
-          )) */
 
   _showBottomSheet(BuildContext? context, TaskModel? task) {
     return Get.bottomSheet(Container(

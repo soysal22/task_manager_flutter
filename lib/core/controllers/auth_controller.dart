@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'dart:math';
-
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +9,6 @@ import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/view/auth/login_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:manger_mission/view/deneme/deneme_home.dart';
-import 'package:manger_mission/view/splash_screen.dart';
 
 class AuthController extends GetxController {
   // Auth controller instance  ..
@@ -42,18 +40,19 @@ class AuthController extends GetxController {
           .createUserWithEmailAndPassword(
               email: authModel!.email!, password: authModel.password!)
           .then((value) {
+        log("Users Created");
         Get.snackbar(
           "About User",
           "User Message",
           backgroundColor: Constants.colorRed,
           snackPosition: SnackPosition.TOP,
-          duration: const Duration(seconds: 5),
+          //  duration: const Duration(seconds: 5),
           titleText: const Text(
             "Account Creation succesfuly",
             style: TextStyle(color: Constants.colorWhite),
           ),
         );
-        Future.delayed(Duration.zero, () => Get.to(() => const SplashScreen()));
+        Future.delayed(Duration.zero, () => Get.back());
       });
     } catch (e) {
       Get.snackbar("About User", "User Message",
@@ -71,7 +70,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void login({required AuthModel? authModel}) async {
+  void login({required AuthModel? authModel, BuildContext? context}) async {
     try {
       await auth
           .signInWithEmailAndPassword(
@@ -79,7 +78,20 @@ class AuthController extends GetxController {
           .then((value) {
         print("Giriş başarılı");
 
-        Get.to(() => const DenemeHome());
+        Get.defaultDialog(
+          backgroundColor: Constants.colorRed,
+          barrierDismissible: true,
+          title: "Login Successfuly",
+          titleStyle: const TextStyle(color: Constants.colorWhite),
+          content: const Icon(
+            Icons.handshake_outlined,
+            size: 20,
+          ),
+          onConfirm: () {
+            Future.delayed(Duration.zero);
+            Get.to(() => const DenemeHome());
+          },
+        );
       });
     } catch (e) {
       Get.snackbar("About Login", "Login Message",

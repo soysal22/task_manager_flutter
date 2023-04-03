@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/view/auth/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,10 +12,14 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () => const LoginPage());
-
     // firebaseInit();
+    git();
     super.initState();
+  }
+
+  Future<void> git() async {
+    Future.delayed(
+        const Duration(seconds: 1), () => Get.to(() => const LoginPage()));
   }
 
   // Future<void> firebaseInit() async {
@@ -25,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   //   setState(() {
   //     if (FirebaseAuth.instance.currentUser != null) {
   //       log(" ${FirebaseAuth.instance.currentUser!.displayName!} Kullanıcısı Giriş Yaptı");
-  //       Get.to(() => const DenemeHome());
+  //       Get.to(() => const ObxTwo());
   //     } else {
   //       Get.to(() => const LoginPage());
   //     }

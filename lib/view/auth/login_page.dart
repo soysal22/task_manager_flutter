@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           checkedBox = !checkedBox;
 
-          log("checkBoxController.CheckBool.value  :  ${checkedBox}");
+          log("checkBoxController  :  ${checkedBox}");
         });
       },
     );

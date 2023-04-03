@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/models/task_model.dart';
+import 'package:manger_mission/view/auth/login_page.dart';
 
 String? uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -16,15 +17,17 @@ class DenemeTaskController extends GetxController {
           .doc(uid)
           .collection('tasks');
 
-  List listTask = [].obs;
+  List<TaskModel>? listTask;
 
   // yeni  verileri veya olan verileri getirmek için  bu fonksiyon kullanılıyor
 
-  Future<List> getTask() async {
+  Future getTask() async {
     final querySnapshot = await userCollectionRef.get();
-
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
+        querySnapshot.docs;
     listTask =
-        querySnapshot.docs.map((e) => TaskModel.fromJson(e.data())).toList();
+        documentSnapshot.map((e) => TaskModel.fromJson(e.data())).toList();
+    update();
 
     log("get task  = $listTask");
 
@@ -38,6 +41,7 @@ class DenemeTaskController extends GetxController {
     // Call the   Tasks CollectionReference to add a new Tasks
 
     return userCollectionRef.add(task!.toJson()).then((value) {
+      update();
       log("Task Added");
     }).catchError((error) => log("Failed to Task: $error"));
   }
@@ -45,11 +49,10 @@ class DenemeTaskController extends GetxController {
   // 1 Task silmek için kullanılan fonksiyon
 
   Future<void> deleteTask(String? reference) async {
-    return await userCollectionRef
-        .doc(reference)
-        .delete()
-        .then((value) => log("Task Deleted"))
-        .catchError((error) => log("Failed to Task: $error"));
+    return await userCollectionRef.doc(reference).delete().then((value) {
+      update();
+      log("Task Deleted");
+    }).catchError((error) => log("Failed to Task: $error"));
   }
 
 // bu fonksiyondaki arkadaş bütün verileri silmek içn kullanılıyor
@@ -87,10 +90,11 @@ class DenemeTaskController extends GetxController {
 
   Future<void> addUser({AuthModel? authModel}) async {
     CollectionReference<Map<String, dynamic>> userRef =
-        FirebaseFirestore.instance.collection('newUser');
+        FirebaseFirestore.instance.collection('newUsers');
 
     return userRef.add(authModel!.toJson()).then((value) {
       log("User Added");
+      Get.to(() => const LoginPage());
     }).catchError((error) => log("Failed to User: $error"));
   }
 }
