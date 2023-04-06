@@ -11,14 +11,14 @@ import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/my_input_field.dart';
 import 'package:manger_mission/view/home_page.dart';
 
-class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+class UpdateTaskPage extends StatefulWidget {
+  const UpdateTaskPage({super.key});
 
   @override
-  State<AddTaskPage> createState() => _AddTaskPageState();
+  State<UpdateTaskPage> createState() => _UpdateTaskPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _UpdateTaskPageState extends State<UpdateTaskPage> {
   DateTime selectedDate = DateTime.now();
   String endTime = "09,30 PM";
   String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -45,7 +45,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Add Task",
+                "Update Task",
                 style: headingStyle,
               ),
               // title is Here
@@ -96,7 +96,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   _addTaskDb() async {
-    await taskController.AddTask(
+    await taskController.addTask(
         task: TaskModel(
       title: titleEditingController?.text,
       note: noteEditingController?.text,

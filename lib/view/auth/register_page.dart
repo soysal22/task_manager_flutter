@@ -115,6 +115,13 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  // userSigin() async {
+  //   return AuthController.instance.loginUser == true
+  //       ? Future.delayed(const Duration(seconds: 1))
+  //           .then((value) => Get.to(const DenemeHome()))
+  //       : const Center(child: CircularProgressIndicator());
+  // }
+
   Text _buttonText(BuildContext context, String title, Color color) {
     return Text(title,
         style: Theme.of(context).textTheme.subtitle1?.copyWith(

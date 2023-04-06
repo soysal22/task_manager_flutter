@@ -35,6 +35,8 @@ class TaskModel {
     repeat = json['repeat'];
   }
 
+  get length => null;
+
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['id'] = id;

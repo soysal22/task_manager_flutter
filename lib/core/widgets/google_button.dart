@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/controllers/auth_controller.dart';
-import 'package:manger_mission/view/deneme/deneme_home.dart';
+import 'package:manger_mission/view/home_page.dart';
 
 class GoogleButton extends StatefulWidget {
   const GoogleButton({super.key});
@@ -57,7 +57,7 @@ class _GoogleButtonState extends State<GoogleButton> {
     signInWithGoogle().then((value) {
       log("${FirebaseAuth.instance.currentUser!.displayName} Kullanıcısının Girişi Başarılı");
 
-      Get.to(() => const DenemeHome());
+      Get.to(() => const HomePage());
     });
   }
 }

@@ -6,9 +6,9 @@ import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 
-class DenemeDetail extends StatelessWidget {
+class DetailPage extends StatelessWidget {
   final TaskModel task;
-  DenemeDetail({super.key, required this.task});
+  DetailPage({super.key, required this.task});
 
   final double size = Get.width / 10;
 

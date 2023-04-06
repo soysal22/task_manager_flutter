@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/models/task_model.dart';
-import 'package:manger_mission/view/deneme/deneme_detail_page.dart';
+import 'package:manger_mission/view/detail_page.dart';
 
 class TaskTile extends StatelessWidget {
   final TaskModel? task;
@@ -57,7 +57,7 @@ class TaskTile extends StatelessWidget {
                     side: const BorderSide(
                         color: Constants.colorWhite, width: 2)),
                 onPressed: () {
-                  Get.to(() => DenemeDetail(
+                  Get.to(() => DetailPage(
                         task: task!,
                       ));
                 },

@@ -9,6 +9,7 @@ import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
+import 'package:manger_mission/core/widgets/google_button.dart';
 import 'package:manger_mission/view/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -55,6 +56,10 @@ class _LoginPageState extends State<LoginPage> {
                     _rowCheckBoxAnfForgetText(context),
                     Constants.sizedBoxHeight20,
                     _loginButton(context),
+                    Constants.sizedBoxHeight20,
+                    _greyText(context, "Or Login with "),
+                    Constants.sizedBoxHeight20,
+                    const GoogleButton(),
                     Constants.sizedBoxHeight20,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -113,6 +118,8 @@ class _LoginPageState extends State<LoginPage> {
                   authModel: AuthModel(
                       email: emailController.text.trim(),
                       password: passwordController.text.trim()));
+              emailController.clear();
+              passwordController.clear();
             }
           },
           child: Text("Login", style: buttonTextStyleWhite),
@@ -229,16 +236,49 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           title == "Sign Up"
               ? Get.to(
+                  () => const RegisterPage(),
                   duration: const Duration(seconds: 1),
                   curve: Curves.bounceOut,
-                  () => const RegisterPage(),
                 )
-              : null;
+              : _showDialogDesigned();
         },
         child: Text(
           title,
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
               color: Constants.primaryColor, fontWeight: FontWeight.bold),
         ));
+  }
+
+  _showDialogDesigned() {
+    return Get.dialog(AlertDialog(
+      title: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Container(
+            width: double.minPositive,
+            height: double.minPositive,
+            decoration: BoxDecoration(
+                borderRadius: Constants.borderRadius40,
+                border: Border.all(width: 2, color: Constants.colorGrey)),
+            child: const Center(
+              child: Icon(
+                Icons.close_sharp,
+                color: Constants.colorRed,
+                size: 40,
+              ),
+            ),
+          )),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _greyText(context, "Bakım Aşamasındadır"),
+          Constants.sizedBoxHeight10,
+          const CircularProgressIndicator.adaptive(
+            backgroundColor: Constants.colorRed,
+          ),
+        ],
+      ),
+    ));
   }
 }

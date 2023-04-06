@@ -1,37 +1,38 @@
-// ignore_for_file: avoid_print
-
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
+import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:manger_mission/view/deneme/deneme_home.dart';
+import 'package:manger_mission/view/auth/login_page.dart';
+import 'package:manger_mission/view/home_page.dart';
 
 class AuthController extends GetxController {
   // Auth controller instance  ..
-  static AuthController instance = Get.put(AuthController());
+  static AuthController instance = Get.find();
   // email , password , name ....
   // late var _user;
 
+  final TaskController authTaskController = Get.put(TaskController());
+
   FirebaseAuth auth = FirebaseAuth.instance;
+  late final Rx<User?> _user;
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   _user = auth.currentUser;
-  //   _user.bindStream(auth.userChanges());
-  //   //   ever(_user, initialScreen);
-  // }
+  @override
+  void onReady() {
+    super.onReady();
+    _user = Rx<User?>(auth.currentUser);
+    _user.bindStream(auth.userChanges());
+    ever(_user, initialScreen);
+  }
 
-  // initialScreen(User? user) {
-  //   if (user == null) {
-  //     Get.offAll(() => const LoginPage());
-  //   } else {
-  //     Get.offAll(() => const DenemeHome());
-  //   }
-  // }
+  initialScreen(User? user) {
+    user == null
+        ? Get.offAll(() => const LoginPage())
+        : Get.offAll(() => const HomePage());
+  }
 
   void login({required AuthModel? authModel, BuildContext? context}) async {
     try {
@@ -39,9 +40,10 @@ class AuthController extends GetxController {
           .signInWithEmailAndPassword(
               email: authModel!.email!, password: authModel.password!)
           .then((value) {
-        print("Giriş başarılı");
-        Future.delayed(const Duration(seconds: 1));
-        Get.to(() => const DenemeHome());
+        log("Giriş başarılı");
+        _user.value != null
+            ? Get.offAll(() => const HomePage())
+            : Get.offAll(() => const LoginPage());
       });
     } catch (e) {
       Get.snackbar("About Login", "Login Message",
@@ -63,10 +65,10 @@ class AuthController extends GetxController {
       await auth
           .createUserWithEmailAndPassword(
               email: authModel!.email!, password: authModel.password!)
-          .then((value) {
-        denemeTaskController.addNewUser();
-        log("Users Created");
-        Future.delayed(const Duration(seconds: 1));
+          .then((value) async {
+        authTaskController.addNewUser().then((value) async {
+          log("User Created");
+        });
         Get.back();
       });
     } catch (e) {

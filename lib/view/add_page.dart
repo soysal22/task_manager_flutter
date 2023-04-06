@@ -9,16 +9,15 @@ import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/my_input_field.dart';
-import 'package:manger_mission/view/home_page.dart';
 
-class UpdateTaskPage extends StatefulWidget {
-  const UpdateTaskPage({super.key});
+class AddPage extends StatefulWidget {
+  const AddPage({super.key});
 
   @override
-  State<UpdateTaskPage> createState() => _UpdateTaskPageState();
+  State<AddPage> createState() => _AddPageState();
 }
 
-class _UpdateTaskPageState extends State<UpdateTaskPage> {
+class _AddPageState extends State<AddPage> {
   DateTime selectedDate = DateTime.now();
   String endTime = "09,30 PM";
   String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -45,7 +44,7 @@ class _UpdateTaskPageState extends State<UpdateTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Update Task",
+                "Add Task",
                 style: headingStyle,
               ),
               // title is Here
@@ -77,8 +76,6 @@ class _UpdateTaskPageState extends State<UpdateTaskPage> {
         noteEditingController!.text.isNotEmpty) {
       // add to database    //  buraya yazdıklarımmızı kaydedeceğiz
       await _addTaskDb();
-
-      Get.to(() => const HomePage());
     } else if (titleEditingController!.text.isEmpty ||
         noteEditingController!.text.isEmpty) {
       Get.snackbar(
@@ -96,18 +93,20 @@ class _UpdateTaskPageState extends State<UpdateTaskPage> {
   }
 
   _addTaskDb() async {
-    await taskController.AddTask(
-        task: TaskModel(
-      title: titleEditingController?.text,
-      note: noteEditingController?.text,
-      date: DateFormat.yMd().format(selectedDate),
-      startTime: startTime,
-      endTime: endTime,
-      remind: selectedRemind,
-      repeat: selectedRepeat,
-      color: selectedColor,
-      isCompleted: 0,
-    ));
+    await taskController
+        .addTask(
+            task: TaskModel(
+          title: titleEditingController?.text,
+          note: noteEditingController?.text,
+          date: DateFormat.yMd().format(selectedDate),
+          startTime: startTime,
+          endTime: endTime,
+          remind: selectedRemind,
+          repeat: selectedRepeat,
+          color: selectedColor,
+          isCompleted: 0,
+        ))
+        .then((value) => Get.back());
   }
 
   Padding _colorPalette() {
