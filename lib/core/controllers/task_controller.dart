@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 
-String? uid = FirebaseAuth.instance.currentUser!.uid;
+String? uid = FirebaseAuth.instance.currentUser?.uid;
 
 class TaskController extends GetxController {
   final userCollectionRef = FirebaseFirestore.instance
@@ -19,11 +19,13 @@ class TaskController extends GetxController {
 
   List? listTask;
 
-  Future<List?> getTask() async {
+  Future<void> getTask() async {
     await userCollectionRef.get().then((querySnapshot) {
       final data = querySnapshot.docs;
 
       listTask = data.map((datas) => TaskModel.fromJson(datas.data())).toList();
+      log(listTask.toString());
+
       return listTask;
     });
   }
@@ -35,7 +37,6 @@ class TaskController extends GetxController {
     // Call the   Tasks CollectionReference to add a new Tasks
 
     return userCollectionRef.add(task!.toJson()).then((value) {
-      update();
       log("Task Added");
     }).catchError((error) => log("Failed to Task: $error"));
   }
@@ -44,7 +45,6 @@ class TaskController extends GetxController {
 
   Future<void> deleteTask(String? reference) async {
     return await userCollectionRef.doc(reference).delete().then((value) {
-      update();
       log("Task Deleted");
     }).catchError((error) => log("Failed to Task: $error"));
   }
@@ -67,14 +67,14 @@ class TaskController extends GetxController {
 
   Future taskCompleted(String? reference, int? newCompleted) async {
     log("newCompleted yeni hali :  $newCompleted");
-    return await userCollectionRef.doc(reference).update(
-      {'isCompleted': newCompleted},
-      // Set({}) , bundan sonra set opstionsu kullanıyoruz ..
-      // SetOptions(merge: true)
-      // update ({'isCompleted': newCompleted}) bu şekilde yazmamız yeterli olur
-      // set yerine update fonksiyonunuda kullanabiliriz
-      // merge kodu sayesinde sadece değiştirmek istediğimiz yeri değiştirip diğer yerlerin sabit kalmasıısağlayabiliriz
-    ).then((value) {
+    return await userCollectionRef.doc(reference).set(
+        {'isCompleted': newCompleted}, SetOptions(merge: true)
+        // Set({}) , bundan sonra set opstionsu kullanıyoruz ..
+        // SetOptions(merge: true)
+        // update ({'isCompleted': newCompleted}) bu şekilde yazmamız yeterli olur
+        // set yerine update fonksiyonunuda kullanabiliriz
+        // merge kodu sayesinde sadece değiştirmek istediğimiz yeri değiştirip diğer yerlerin sabit kalmasıısağlayabiliriz
+        ).then((value) {
       log("Task  Completed");
     }).catchError((error) => log("Failed to Task: $error"));
   }

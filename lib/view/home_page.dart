@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   DateTime selectedDate = DateTime.now();
 
-  final TaskController taskController = Get.put(TaskController());
+  final TaskController taskController = Get.find();
 
   //  var notifyHelper = NotifyHelper();
 
@@ -170,11 +170,10 @@ class _HomePageState extends State<HomePage> {
             IconButton(
                 onPressed: () async {
                   try {
-                    await sigInOutWithGoogle().then((value) {
-                      log("$userName Kullanıcısı Çıkış Yaptı");
-                      Future.delayed(const Duration(milliseconds: 1000));
-                      Get.offAll(() => const SplashScreen());
-                    });
+                    log("$userName Kullanıcısı Çıkış Yaptı");
+                    //Future.delayed(const Duration(milliseconds: 1000));
+                    Get.to(() => const SplashScreen());
+                    await sigInOutWithGoogle();
                   } catch (e) {
                     print(e);
                   }
@@ -216,11 +215,12 @@ class FirebaseGetData extends StatefulWidget {
   _FirebaseGetDataState createState() => _FirebaseGetDataState();
 }
 
-final TaskController denemeTaskController = Get.put(TaskController());
+final TaskController taskController = Get.find();
 
 DateTime selectedDate = DateTime.now();
 String? deleteId;
 int? newCompleted;
+List<TaskModel>? gelenTask;
 
 //List<TaskModel>? gelenTask;
 List<DocumentSnapshot>? listOfDocumentSnap;
@@ -244,68 +244,54 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           }
           log(snapshot.connectionState.toString());
 
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              const Placeholder();
-              break;
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              Padding(
-                padding: EdgeInsets.only(top: Get.width / 4),
-                child: const Center(child: CircularProgressIndicator()),
-              );
-              break;
-
-            case ConnectionState.done:
-              _designHomeListView();
-              break;
+          if (snapshot.connectionState == ConnectionState.none) {
+            return const Placeholder();
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Padding(
+              padding: EdgeInsets.only(top: Get.width / 4),
+              child: const Center(child: CircularProgressIndicator()),
+            );
           }
 
           log("uid : $uid");
 
           try {
+            listOfDocumentSnap = snapshot.data.docs;
             //gelen query snapshot verilerini document snopshot a çevirdik
             // gelen dosyayı kendi modeline me göre çevirip listeliyorum
-            // gelenTask = listOfDocumentSnap!
-            //     .map(
-            //         (e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
-            //     .toList();
-            //  log("gelen Task  length : ${gelenTask?.length}");
-            listOfDocumentSnap = snapshot.data.docs;
+            gelenTask = listOfDocumentSnap!
+                .map(
+                    (e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
+                .toList();
+            log("gelen Task  length : ${gelenTask?.length}");
           } catch (e) {
             log("error :  $e");
           }
 
-          log("gelen deneme Task  length : ${denemeTaskController.listTask?.length}");
-          return Container();
+          log("gelen deneme Task  length : ${taskController.listTask?.length}");
+
+          return _designHomeListView();
         });
   }
 
   _designHomeListView() {
     return Expanded(
-        child: denemeTaskController.listTask?.length == 0
+        child: gelenTask?.length == 0 || gelenTask?.length == null
             ? _hasntData()
-            : FutureBuilder(
-                future: denemeTaskController.getTask(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                      itemCount: denemeTaskController.listTask?.length,
-                      itemBuilder: (context, index) {
-                        TaskModel? task = denemeTaskController.listTask?[index];
-                        //  log("Task Date : ${task?.date.toString() ?? "date yok "} ");
-                        dateString == task?.date
-                            ? GestureDetector(
-                                onTap: () {
-                                  _showBottomSheet(context, task);
+            : ListView.builder(
+                itemCount: gelenTask?.length,
+                itemBuilder: (context, index) {
+                  TaskModel? task = gelenTask?[index];
+                  log("Task Date : ${task?.date.toString() ?? "date yok "} ");
+                  return GestureDetector(
+                      onTap: () {
+                        _showBottomSheet(context, task);
 
-                                  deleteId =
-                                      listOfDocumentSnap?[index].reference.id;
-                                },
-                                child: TaskTile(task: task))
-                            : Container();
-                      });
-                },
-              ));
+                        deleteId = listOfDocumentSnap?[index].reference.id;
+                      },
+                      child: TaskTile(task: task));
+                }));
   }
 
 /*  ListView.builder(
@@ -396,12 +382,11 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
                   label: "Task Completed",
                   onTap: () async {
                     log("isCompleted ilk hali : ${task!.isCompleted}");
-
+                    Get.back();
                     task.isCompleted = 1;
-                    await denemeTaskController.taskCompleted(
+                    await taskController.taskCompleted(
                         deleteId, task.isCompleted);
 
-                    Get.back();
                     log("isCompleted son  hali : ${task.isCompleted}");
                   },
                   color: Constants.primaryColor),
@@ -411,9 +396,8 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
               context: context,
               label: "Delete",
               onTap: () async {
-                await denemeTaskController.deleteTask(deleteId).then((value) {
-                  Get.back();
-                });
+                Get.back();
+                await taskController.deleteTask(deleteId);
               },
               color: Constants.colorRed),
           Constants.sizedBoxHeight20,

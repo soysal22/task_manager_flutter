@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_nullable
+
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +13,11 @@ import 'package:manger_mission/view/home_page.dart';
 
 class AuthController extends GetxController {
   // Auth controller instance  ..
-  static AuthController instance = Get.find();
+  static AuthController get instance => Get.put(AuthController());
   // email , password , name ....
   // late var _user;
 
-  final TaskController authTaskController = Get.put(TaskController());
+  final TaskController taskController = Get.put(TaskController());
 
   FirebaseAuth auth = FirebaseAuth.instance;
   late final Rx<User?> _user;
@@ -66,10 +68,9 @@ class AuthController extends GetxController {
           .createUserWithEmailAndPassword(
               email: authModel!.email!, password: authModel.password!)
           .then((value) async {
-        authTaskController.addNewUser().then((value) async {
+        taskController.addNewUser().then((value) async {
           log("User Created");
         });
-        Get.back();
       });
     } catch (e) {
       Get.snackbar("About User", "User Message",
@@ -88,28 +89,38 @@ class AuthController extends GetxController {
   }
 }
 
-/// logiin With google
+/// login With google
 
-Future<UserCredential> signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+Future<UserCredential?> signInWithGoogle() async {
+  //<UserCredential>
+  try {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth =
-      await googleUser?.authentication;
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(credential);
+    // Once signed in, return the UserCredential
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  } catch (e) {
+    log(e.toString());
+  }
 }
 
 Future<void> sigInOutWithGoogle() async {
-  await FirebaseAuth.instance.signOut();
+  try {
+    await FirebaseAuth.instance.signOut();
 
-  await GoogleSignIn().signOut();
+    await GoogleSignIn().signOut();
+  } catch (e) {
+    log(e.toString());
+  }
 }

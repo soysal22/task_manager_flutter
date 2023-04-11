@@ -8,6 +8,8 @@ class Constants {
 
   static const String imageSplash = "assets/images/splash.png";
 
+  static const String imageLogin = "assets/images/login_image.png";
+
 // TEXTS
 
   static const String textCreateAccount = "Create Account";
@@ -47,6 +49,7 @@ class Constants {
   static const SizedBox sizedBoxHeight8 = SizedBox(height: 8);
   static const SizedBox sizedBoxHeight10 = SizedBox(height: 10);
   static const SizedBox sizedBoxHeight12 = SizedBox(height: 12);
+  static const SizedBox sizedBoxHeight15 = SizedBox(height: 15);
   static const SizedBox sizedBoxHeight20 = SizedBox(height: 20);
 
   //   Width

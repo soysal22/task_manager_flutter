@@ -65,6 +65,15 @@ TextStyle get subHeadingStyle {
   ));
 }
 
+TextStyle get createHeadingStyle {
+  return GoogleFonts.lato(
+      textStyle: TextStyle(
+    fontSize: 27,
+    fontWeight: FontWeight.bold,
+    color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
+  ));
+}
+
 TextStyle get headingStyle {
   return GoogleFonts.lato(
       textStyle: TextStyle(

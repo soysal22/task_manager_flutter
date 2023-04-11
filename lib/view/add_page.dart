@@ -27,7 +27,7 @@ class _AddPageState extends State<AddPage> {
   String selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Monthly"];
 
-  final TaskController taskController = Get.put(TaskController());
+  final TaskController taskController = Get.find();
 
   final TextEditingController? titleEditingController = TextEditingController();
   final TextEditingController? noteEditingController = TextEditingController();

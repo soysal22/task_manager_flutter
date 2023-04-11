@@ -10,6 +10,7 @@ import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validation_mixin.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
+import 'package:manger_mission/core/widgets/grey_text.dart';
 import 'package:manger_mission/view/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,49 +26,53 @@ TextEditingController passwordController = TextEditingController();
 bool checkedBox = false;
 bool obscureText = true;
 
-final formKey = GlobalKey<FormState>();
+final GlobalKey<FormState> loginFormKey =
+    GlobalKey<FormState>(debugLabel: 'login');
 
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key("log"),
       appBar: null,
       backgroundColor: Constants.colorWhite,
       extendBody: true,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: Form(
-          key: formKey,
-          child: SingleChildScrollView(
+      body: Form(
+        key: loginFormKey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      bottom: Get.width / 5, top: Get.height / 7),
-                  child: _title(context),
+                Column(
+                  children: [
+                    Hero(
+                      tag: "image",
+                      child: Image.asset(
+                        Constants.imageLogin,
+                        fit: BoxFit.cover,
+                        height: Get.width / 1.5,
+                      ),
+                    ),
+                    _title(context),
+                  ],
                 ),
+                Constants.sizedBoxHeight10,
                 Column(
                   children: [
                     _emailCardTextfield(),
-                    Constants.sizedBoxHeight20,
+                    Constants.sizedBoxHeight10,
                     _passwordCardTextfield(),
-                    Constants.sizedBoxHeight20,
                     _rowCheckBoxAnfForgetText(context),
-                    Constants.sizedBoxHeight20,
                     _loginButton(context),
-                    Constants.sizedBoxHeight20,
-                    _greyText(context, "Or Login with "),
-                    Constants.sizedBoxHeight20,
+                    Constants.sizedBoxHeight10,
+                    const GreyText(title: "Or Login with"),
+                    Constants.sizedBoxHeight10,
                     const GoogleButton(),
-                    Constants.sizedBoxHeight20,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _greyText(context, "If you don't have an acocount? "),
-                        _customTextButton(context, "Sign Up")
-                      ],
-                    ),
+                    Constants.sizedBoxHeight15,
+                    _textsIfSingUp(context),
                   ],
                 ),
               ],
@@ -78,14 +83,29 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Text _greyText(BuildContext context, String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 18,
-        color: Constants.colorGrey,
-      ),
-    );
+  TextButton _textsIfSingUp(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          Get.to(() => const RegisterPage());
+        },
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                  text: "If you don't have an acocount? ",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Constants.colorGrey, fontSize: 19)),
+              TextSpan(
+                  text: "SignUp",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: Constants.blusihColor, fontSize: 20)),
+            ],
+          ),
+        ));
   }
 
   Checkbox _checkBox() {
@@ -113,13 +133,11 @@ class _LoginPageState extends State<LoginPage> {
           color: Constants.primaryColor,
           borderRadius: Constants.borderRadius15,
           onPressed: () async {
-            if (formKey.currentState?.validate() == true) {
+            if (loginFormKey.currentState?.validate() == true) {
               AuthController.instance.login(
                   authModel: AuthModel(
                       email: emailController.text.trim(),
                       password: passwordController.text.trim()));
-              emailController.clear();
-              passwordController.clear();
             }
           },
           child: Text("Login", style: buttonTextStyleWhite),
@@ -237,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
           title == "Sign Up"
               ? Get.to(
                   () => const RegisterPage(),
-                  duration: const Duration(seconds: 1),
+                  // duration: const Duration(seconds: 1),
                   curve: Curves.bounceOut,
                 )
               : _showDialogDesigned();
@@ -271,10 +289,10 @@ class _LoginPageState extends State<LoginPage> {
           )),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          _greyText(context, "Bakım Aşamasındadır"),
+        children: const [
+          GreyText(title: "Bakım Aşamasındadır"),
           Constants.sizedBoxHeight10,
-          const CircularProgressIndicator.adaptive(
+          CircularProgressIndicator.adaptive(
             backgroundColor: Constants.colorRed,
           ),
         ],
