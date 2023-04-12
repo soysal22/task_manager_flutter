@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manger_mission/core/constants/constants.dart';
-import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/style/textStyle.dart';
 
 class MyButton extends StatelessWidget {
   final String? title;

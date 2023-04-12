@@ -7,10 +7,11 @@ import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
-import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/style/textStyle.dart';
 import 'package:manger_mission/core/validates/validations.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
 import 'package:manger_mission/core/widgets/grey_text.dart';
+import 'package:manger_mission/core/widgets/text_title.dart';
 import 'package:manger_mission/view/auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -26,15 +27,12 @@ TextEditingController passwordController = TextEditingController();
 bool checkedBox = false;
 bool obscureText = true;
 
-final GlobalKey<ScaffoldState> scaffoldKeyO = GlobalKey<ScaffoldState>();
-
-final loginFormKey = GlobalKey<FormState>();
+final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKeyO,
       appBar: null,
       backgroundColor: Constants.colorWhite,
       extendBody: true,
@@ -48,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _image(),
-                _title(context),
+                TextTitle(title: "Welcome To Login Page "),
                 Constants.sizedBoxHeight10,
                 _emailCardTextfield(),
                 Constants.sizedBoxHeight10,
@@ -83,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
   TextButton _textsIfSingUp(BuildContext context) {
     return TextButton(
         onPressed: () {
-          Get.to(() => const RegisterPage());
+          Get.to(() => RegisterPage());
         },
         child: RichText(
           text: TextSpan(
@@ -103,21 +101,6 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ));
-  }
-
-  Checkbox _checkBox() {
-    return Checkbox(
-      tristate: true,
-      value: checkedBox,
-      activeColor: Colors.orange,
-      onChanged: (newBool) {
-        setState(() {
-          checkedBox = !checkedBox;
-
-          log("checkBoxController  :  ${checkedBox}");
-        });
-      },
-    );
   }
 
   Widget _loginButton(BuildContext context) {
@@ -168,7 +151,6 @@ class _LoginPageState extends State<LoginPage> {
           title: Stack(
             children: [
               Column(
-                mainAxisSize: MainAxisSize.min,
                 children: const [
                   GreyText(title: "Bakım Aşamasındadır"),
                   Constants.sizedBoxHeight10,
@@ -193,16 +175,6 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Text _title(BuildContext context) {
-    return Text(
-      "Welcome To Login Page ",
-      style: Theme.of(context)
-          .textTheme
-          .headline5
-          ?.copyWith(color: Constants.colorBlack, fontWeight: FontWeight.bold),
-    );
-  }
-
   Card _emailCardTextfield() {
     return Card(
       elevation: 5,
@@ -216,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: emailController,
             decoration: const InputDecoration(
                 border: InputBorder.none,
-                hintText: "Please Write to an Email Ex: adasd@dada ",
+                hintText: "Write to an Email Ex: asd@dad.com ",
                 prefixIcon: Icon(
                   Icons.email_sharp,
                   size: 25,

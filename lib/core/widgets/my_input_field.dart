@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
-import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/style/textStyle.dart';
 
 class MyInputField extends StatelessWidget {
   final String title;
@@ -23,10 +23,7 @@ class MyInputField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: titleStyle,
-          ),
+          Text(title, style: titleStyle),
           Container(
             margin: const EdgeInsets.only(top: 8),
             padding: const EdgeInsets.only(left: 14),

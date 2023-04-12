@@ -17,20 +17,19 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    firebaseInit();
-
     super.initState();
+    firebaseInit();
   }
 
-  Future<void> firebaseInit() async {
+  Future firebaseInit() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     setState(() {
       if (FirebaseAuth.instance.currentUser != null) {
         log(" ${FirebaseAuth.instance.currentUser?.displayName ?? "User Name"} Kullanıcısı Giriş Yaptı");
-        Get.offAll(() => const HomePage());
+        Get.to(() => const HomePage());
       } else {
-        Get.offAll(() => const LoginPage());
+        Get.to(() => const LoginPage());
       }
     });
   }

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/task_model.dart';
-import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/style/textStyle.dart';
 import 'package:manger_mission/core/widgets/my_button.dart';
 import 'package:manger_mission/core/widgets/my_input_field.dart';
 

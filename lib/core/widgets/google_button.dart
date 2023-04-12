@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
-import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/style/textStyle.dart';
 import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/view/home_page.dart';
 

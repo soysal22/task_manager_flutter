@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/models/task_model.dart';
-import 'package:manger_mission/core/themes/themes.dart';
+import 'package:manger_mission/core/style/textStyle.dart';
 
 class DetailPage extends StatelessWidget {
   final TaskModel task;

@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
-import 'package:manger_mission/core/themes/themes.dart';
 import 'package:manger_mission/core/validates/validations.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
 import 'package:manger_mission/core/widgets/grey_text.dart';
+import 'package:manger_mission/core/widgets/text_title.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -24,16 +24,12 @@ final TextEditingController emailController = TextEditingController();
 final TextEditingController passwordController = TextEditingController();
 
 bool registerObscureText = true;
-
-final registerFormKey = GlobalKey<FormState>();
-
-final scaffoldKey = Key("register");
+final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
 
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: Constants.colorWhite,
       appBar: null,
       extendBody: true,
@@ -45,7 +41,9 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               children: [
                 _image(),
-                Text("Create Account", style: createHeadingStyle),
+
+                TextTitle(title: "Create Account"),
+                //  Text("Create Account", style: createHeadingStyle),
                 Constants.sizedBoxHeight10,
                 _nameTextField(),
                 Constants.sizedBoxHeight15,
