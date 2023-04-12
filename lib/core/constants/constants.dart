@@ -20,6 +20,8 @@ class Constants {
   static Color? colorGrey100 = Colors.grey[100];
   static Color? colorGrey200 = Colors.grey[200];
 
+  static Color? colorGrey400 = Colors.grey[400];
+
   static const Color colorWhite = Colors.white;
   static const Color colorRed = Colors.red;
   static const Color colorBlack = Colors.black;

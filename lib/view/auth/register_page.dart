@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, prefer_const_constructors
 
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +8,7 @@ import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
-import 'package:manger_mission/core/validates/validation_mixin.dart';
+import 'package:manger_mission/core/validates/validations.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
 import 'package:manger_mission/core/widgets/grey_text.dart';
 
@@ -25,21 +25,23 @@ final TextEditingController passwordController = TextEditingController();
 
 bool registerObscureText = true;
 
-final GlobalKey<FormState> registerFormKey =
-    GlobalKey<FormState>(debugLabel: 'register');
+final registerFormKey = GlobalKey<FormState>();
+
+final scaffoldKey = Key("register");
 
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Constants.colorWhite,
       appBar: null,
       extendBody: true,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
-        child: Form(
-          key: registerFormKey,
-          child: SingleChildScrollView(
+      body: Form(
+        key: registerFormKey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
             child: Column(
               children: [
                 _image(),

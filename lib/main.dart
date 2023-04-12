@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_return_type_for_catch_error, avoid_print
 
-import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,14 +15,11 @@ import 'package:manger_mission/view/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  try {
-    await Firebase.initializeApp().then((value) {
-      Get.put(AuthController());
-      Get.put(TaskController());
-    });
-  } catch (e) {
-    log(e.toString());
-  }
+  await Firebase.initializeApp().then((value) {
+    Get.put(AuthController());
+    Get.put(TaskController());
+  });
+
   await GetStorage.init();
 
   SystemChrome.setSystemUIOverlayStyle(

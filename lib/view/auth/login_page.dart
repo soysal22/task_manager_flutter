@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unrelated_type_equality_checks, unused_element, unnecessary_brace_in_string_interps, non_constant_identifier_names, deprecated_member_use
+// ignore_for_file: avoid_print, unrelated_type_equality_checks, unused_element, unnecessary_brace_in_string_interps, non_constant_identifier_names, deprecated_member_use, prefer_const_constructors
 
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +8,7 @@ import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:manger_mission/core/themes/themes.dart';
-import 'package:manger_mission/core/validates/validation_mixin.dart';
+import 'package:manger_mission/core/validates/validations.dart';
 import 'package:manger_mission/core/widgets/google_button.dart';
 import 'package:manger_mission/core/widgets/grey_text.dart';
 import 'package:manger_mission/view/auth/register_page.dart';
@@ -26,14 +26,15 @@ TextEditingController passwordController = TextEditingController();
 bool checkedBox = false;
 bool obscureText = true;
 
-final GlobalKey<FormState> loginFormKey =
-    GlobalKey<FormState>(debugLabel: 'login');
+final GlobalKey<ScaffoldState> scaffoldKeyO = GlobalKey<ScaffoldState>();
+
+final loginFormKey = GlobalKey<FormState>();
 
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: const Key("log"),
+      key: scaffoldKeyO,
       appBar: null,
       backgroundColor: Constants.colorWhite,
       extendBody: true,
@@ -42,43 +43,39 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 0),
+                const EdgeInsets.only(left: 8, right: 8, top: 20, bottom: 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(
-                  children: [
-                    Hero(
-                      tag: "image",
-                      child: Image.asset(
-                        Constants.imageLogin,
-                        fit: BoxFit.cover,
-                        height: Get.width / 1.5,
-                      ),
-                    ),
-                    _title(context),
-                  ],
-                ),
+                _image(),
+                _title(context),
                 Constants.sizedBoxHeight10,
-                Column(
-                  children: [
-                    _emailCardTextfield(),
-                    Constants.sizedBoxHeight10,
-                    _passwordCardTextfield(),
-                    _rowCheckBoxAnfForgetText(context),
-                    _loginButton(context),
-                    Constants.sizedBoxHeight10,
-                    const GreyText(title: "Or Login with"),
-                    Constants.sizedBoxHeight10,
-                    const GoogleButton(),
-                    Constants.sizedBoxHeight15,
-                    _textsIfSingUp(context),
-                  ],
-                ),
+                _emailCardTextfield(),
+                Constants.sizedBoxHeight10,
+                _passwordCardTextfield(),
+                _forgoTextButton(context),
+                _loginButton(context),
+                Constants.sizedBoxHeight10,
+                const GreyText(title: "Or Login with"),
+                Constants.sizedBoxHeight10,
+                const GoogleButton(),
+                Constants.sizedBoxHeight15,
+                _textsIfSingUp(context),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Hero _image() {
+    return Hero(
+      tag: "image",
+      child: Image.asset(
+        Constants.imageLogin,
+        fit: BoxFit.cover,
+        height: Get.width / 1.5,
       ),
     );
   }
@@ -146,19 +143,54 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Row _rowCheckBoxAnfForgetText(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        // Row(
-        //   children: [
-        //     _checkBox(),
-        //     _rememberText(context)
-        //   ],
-        // ),
-        _customTextButton(context, "Forgot to Password ?")
-      ],
+  Widget _forgoTextButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+          onPressed: () {
+            _showDialogDesigned();
+          },
+          child: Text(
+            "Forgot to Password ?",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: Constants.blusihColor, fontSize: 16),
+          )),
     );
+  }
+
+  _showDialogDesigned() {
+    return Get.dialog(
+        barrierDismissible: true,
+        barrierColor: Constants.colorGrey400,
+        AlertDialog(
+          title: Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  GreyText(title: "Bakım Aşamasındadır"),
+                  Constants.sizedBoxHeight10,
+                  CircularProgressIndicator.adaptive(
+                    backgroundColor: Constants.colorRed,
+                  ),
+                ],
+              ),
+              Positioned(
+                  right: 5,
+                  child: CircleAvatar(
+                    backgroundColor: Constants.colorWhite,
+                    radius: 25,
+                    child: Icon(
+                      Icons.close,
+                      color: Constants.colorRed,
+                      size: 30,
+                    ),
+                  ))
+            ],
+          ),
+        ));
   }
 
   Text _title(BuildContext context) {
@@ -237,66 +269,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Text _rememberText(BuildContext context) {
-    return Text(
-      "Remember Me !",
-      style: Theme.of(context)
-          .textTheme
-          .subtitle1
-          ?.copyWith(color: Constants.colorBlack, fontWeight: FontWeight.bold),
-    );
-  }
-
-  TextButton _customTextButton(BuildContext context, String title) {
-    return TextButton(
-        onPressed: () {
-          title == "Sign Up"
-              ? Get.to(
-                  () => const RegisterPage(),
-                  // duration: const Duration(seconds: 1),
-                  curve: Curves.bounceOut,
-                )
-              : _showDialogDesigned();
-        },
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.subtitle1?.copyWith(
-              color: Constants.primaryColor, fontWeight: FontWeight.bold),
-        ));
-  }
-
-  _showDialogDesigned() {
-    return Get.dialog(AlertDialog(
-      title: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Container(
-            width: double.minPositive,
-            height: double.minPositive,
-            decoration: BoxDecoration(
-                borderRadius: Constants.borderRadius40,
-                border: Border.all(width: 2, color: Constants.colorGrey)),
-            child: const Center(
-              child: Icon(
-                Icons.close_sharp,
-                color: Constants.colorRed,
-                size: 40,
-              ),
-            ),
-          )),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: const [
-          GreyText(title: "Bakım Aşamasındadır"),
-          Constants.sizedBoxHeight10,
-          CircularProgressIndicator.adaptive(
-            backgroundColor: Constants.colorRed,
-          ),
-        ],
-      ),
-    ));
   }
 }
