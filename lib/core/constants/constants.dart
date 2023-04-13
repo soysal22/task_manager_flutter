@@ -20,6 +20,7 @@ class Constants {
   static Color? colorGrey100 = Colors.grey[100];
   static Color? colorGrey200 = Colors.grey[200];
 
+  static Color? colorGreyCustom = const Color.fromARGB(209, 238, 238, 238);
   static Color? colorGrey400 = Colors.grey[400];
 
   static const Color colorWhite = Colors.white;
@@ -48,6 +49,7 @@ class Constants {
   // Height
 
   static const SizedBox sizedBoxHeight0 = SizedBox(height: 0);
+  static const SizedBox sizedBoxHeight2 = SizedBox(height: 2);
   static const SizedBox sizedBoxHeight8 = SizedBox(height: 8);
   static const SizedBox sizedBoxHeight10 = SizedBox(height: 10);
   static const SizedBox sizedBoxHeight12 = SizedBox(height: 12);

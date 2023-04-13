@@ -36,9 +36,9 @@ class _LoginPageState extends State<LoginPage> {
       appBar: null,
       backgroundColor: Constants.colorWhite,
       extendBody: true,
-      body: Form(
-        key: loginFormKey,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Form(
+          key: loginFormKey,
           child: Padding(
             padding:
                 const EdgeInsets.only(left: 8, right: 8, top: 20, bottom: 0),
@@ -51,7 +51,9 @@ class _LoginPageState extends State<LoginPage> {
                 _emailCardTextfield(),
                 Constants.sizedBoxHeight10,
                 _passwordCardTextfield(),
+                Constants.sizedBoxHeight10,
                 _forgoTextButton(context),
+                Constants.sizedBoxHeight2,
                 _loginButton(context),
                 Constants.sizedBoxHeight10,
                 const GreyText(title: "Or Login with"),
@@ -118,6 +120,9 @@ class _LoginPageState extends State<LoginPage> {
                   authModel: AuthModel(
                       email: emailController.text.trim(),
                       password: passwordController.text.trim()));
+
+              emailController.clear();
+              passwordController.clear();
             }
           },
           child: Text("Login", style: buttonTextStyleWhite),
@@ -145,33 +150,34 @@ class _LoginPageState extends State<LoginPage> {
 
   _showDialogDesigned() {
     return Get.dialog(
-        barrierDismissible: true,
-        barrierColor: Constants.colorGrey400,
+        barrierDismissible: false,
+        barrierColor: Constants.colorGreyCustom,
         AlertDialog(
-          title: Stack(
-            children: [
-              Column(
-                children: const [
-                  GreyText(title: "Bakım Aşamasındadır"),
-                  Constants.sizedBoxHeight10,
-                  CircularProgressIndicator.adaptive(
-                    backgroundColor: Constants.colorRed,
-                  ),
-                ],
+          title: Column(
+            children: const [
+              GreyText(title: "Bakım Aşamasındadır"),
+              Constants.sizedBoxHeight20,
+              CircularProgressIndicator.adaptive(
+                backgroundColor: Constants.colorRed,
               ),
-              Positioned(
-                  right: 5,
-                  child: CircleAvatar(
-                    backgroundColor: Constants.colorWhite,
-                    radius: 25,
-                    child: Icon(
-                      Icons.close,
-                      color: Constants.colorRed,
-                      size: 30,
-                    ),
-                  ))
             ],
           ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: CircleAvatar(
+                backgroundColor: Constants.colorGrey200,
+                radius: 25,
+                child: Icon(
+                  Icons.close,
+                  color: Constants.colorRed,
+                  size: 35,
+                ),
+              ),
+            )
+          ],
         ));
   }
 

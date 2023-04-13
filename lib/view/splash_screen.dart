@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:manger_mission/view/auth/login_page.dart';
-import 'package:manger_mission/view/home_page.dart';
+import 'package:manger_mission/view/deneme/deneme_obx_home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     setState(() {
       if (FirebaseAuth.instance.currentUser != null) {
         log(" ${FirebaseAuth.instance.currentUser?.displayName ?? "User Name"} Kullanıcısı Giriş Yaptı");
-        Get.to(() => const HomePage());
+        Get.to(() => const DenemeHome());
       } else {
         Get.to(() => const LoginPage());
       }

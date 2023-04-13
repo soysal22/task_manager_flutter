@@ -9,13 +9,12 @@ import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/models/auth__model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:manger_mission/view/auth/login_page.dart';
-import 'package:manger_mission/view/home_page.dart';
+import 'package:manger_mission/view/deneme/deneme_obx_home.dart';
 
 class AuthController extends GetxController {
   // Auth controller instance  ..
   static AuthController get instance => Get.put(AuthController());
   // email , password , name ....
-  // late var _user;
 
   final TaskController taskController = Get.put(TaskController());
 
@@ -24,19 +23,29 @@ class AuthController extends GetxController {
 
   @override
   void onReady() {
-    super.onReady();
     _user = Rx<User?>(auth.currentUser);
     _user.bindStream(auth.userChanges());
-    ever(_user, initialScreen);
+
+    super.onReady();
   }
 
-  initialScreen(User? user) {
-    user == null
-        ? Get.offAll(() => const LoginPage())
-        : Get.offAll(() => const HomePage());
-  }
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   _user = Rx<User?>(auth.currentUser);
+  //   _user.bindStream(auth.userChanges());
+  //   ever(_user, initialScreen);
+  // }
+
+  // initialScreen(User? user) {
+  //   user == null
+  //       ? Get.offAll(() => const LoginPage())
+  //       : Get.offAll(() => const HomePage());
+  // }
 
   void login({required AuthModel? authModel, BuildContext? context}) async {
+    Get.dialog(const Center(child: CircularProgressIndicator()));
+
     try {
       await auth
           .signInWithEmailAndPassword(
@@ -44,7 +53,7 @@ class AuthController extends GetxController {
           .then((value) {
         log("Giriş başarılı");
         _user.value != null
-            ? Get.offAll(() => const HomePage())
+            ? Get.offAll(() => const DenemeHome())
             : Get.offAll(() => const LoginPage());
       });
     } catch (e) {
@@ -60,17 +69,18 @@ class AuthController extends GetxController {
             style: const TextStyle(color: Constants.colorWhite),
           ));
     }
+    Get.back();
   }
 
   void register({required AuthModel? authModel}) async {
+    Get.dialog(const Center(child: CircularProgressIndicator()));
+
     try {
       await auth
           .createUserWithEmailAndPassword(
               email: authModel!.email!, password: authModel.password!)
           .then((value) async {
-        taskController.addNewUser().then((value) async {
-          log("User Created");
-        });
+        taskController.addNewUser();
       });
     } catch (e) {
       Get.snackbar("About User", "User Message",
@@ -86,6 +96,7 @@ class AuthController extends GetxController {
             style: const TextStyle(color: Constants.colorWhite),
           ));
     }
+    Get.back();
   }
 }
 

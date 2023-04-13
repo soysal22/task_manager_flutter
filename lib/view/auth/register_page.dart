@@ -33,17 +33,15 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: Constants.colorWhite,
       appBar: null,
       extendBody: true,
-      body: Form(
-        key: registerFormKey,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Form(
+          key: registerFormKey,
           child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
             child: Column(
               children: [
                 _image(),
-
                 TextTitle(title: "Create Account"),
-                //  Text("Create Account", style: createHeadingStyle),
                 Constants.sizedBoxHeight10,
                 _nameTextField(),
                 Constants.sizedBoxHeight15,
@@ -125,19 +123,22 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
-  _createButton(BuildContext context) {
+  Widget _createButton(BuildContext context) {
     return SizedBox(
       width: Get.width,
       child: CupertinoButton(
         color: Constants.primaryColor,
         onPressed: () async {
           if (registerFormKey.currentState?.validate() == true) {
-            Get.back();
             AuthController.instance.register(
                 authModel: AuthModel(
                     name: nameController.text.trim(),
                     email: emailController.text.trim(),
                     password: passwordController.text.trim()));
+
+            nameController.clear();
+            emailController.clear();
+            passwordController.clear();
           }
         },
         child: Text(Constants.textCreateAccount,

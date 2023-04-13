@@ -10,7 +10,6 @@ import 'package:manger_mission/core/controllers/auth_controller.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
 import 'package:manger_mission/core/service/theme_services.dart';
 import 'package:manger_mission/core/themes/themes.dart';
-import 'package:manger_mission/view/auth/register_page.dart';
 import 'package:manger_mission/view/splash_screen.dart';
 
 void main() async {
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
       theme: Themes.light,
       darkTheme: Themes.dark,
       themeMode: ThemeService().theme,
-      home: const RegisterPage(),
+      home: const SplashScreen(),
     );
   }
 }

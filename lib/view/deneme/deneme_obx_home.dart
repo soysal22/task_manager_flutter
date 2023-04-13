@@ -18,16 +18,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manger_mission/view/add_page.dart';
 import 'package:manger_mission/view/splash_screen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class DenemeHome extends StatefulWidget {
+  const DenemeHome({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<DenemeHome> createState() => _DenemeHomeState();
 }
 
 String? dateString;
 
-class _HomePageState extends State<HomePage> {
+class _DenemeHomeState extends State<DenemeHome> {
   String? userName =
       FirebaseAuth.instance.currentUser?.displayName ?? " U.Name ";
   String? profilUrl = FirebaseAuth.instance.currentUser?.photoURL;
@@ -277,21 +277,27 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
 
   _designHomeListView() {
     return Expanded(
-        child: gelenTask?.length == 0 || gelenTask?.length == null
+        child: taskController.listTask.length == 0 ||
+                taskController.listTask.length == null
             ? _hasntData()
-            : ListView.builder(
-                itemCount: gelenTask?.length,
-                itemBuilder: (context, index) {
-                  TaskModel? task = gelenTask?[index];
-                  log("Task Date : ${task?.date.toString() ?? "date yok "} ");
-                  return GestureDetector(
-                      onTap: () {
-                        _showBottomSheet(context, task);
+            : FutureBuilder(
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                      itemCount: gelenTask?.length,
+                      itemBuilder: (context, index) {
+                        TaskModel? task = taskController.listTask[index];
+                        //   log("Task Date : ${ taskController.listTask.toString() ?? "date yok "} ");
+                        return GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
 
-                        deleteId = listOfDocumentSnap?[index].reference.id;
-                      },
-                      child: TaskTile(task: task));
-                }));
+                              deleteId =
+                                  listOfDocumentSnap?[index].reference.id;
+                            },
+                            child: TaskTile(task: task));
+                      });
+                },
+              ));
   }
 
 /*  ListView.builder(

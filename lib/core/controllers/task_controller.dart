@@ -17,13 +17,14 @@ class TaskController extends GetxController {
 
   // yeni  verileri veya olan verileri getirmek için  bu fonksiyon kullanılıyor
 
-  List? listTask;
+  RxList listTask = [].obs;
 
   Future<void> getTask() async {
     await userCollectionRef.get().then((querySnapshot) {
       final data = querySnapshot.docs;
 
-      listTask = data.map((datas) => TaskModel.fromJson(datas.data())).toList();
+      listTask.value =
+          data.map((datas) => TaskModel.fromJson(datas.data())).toList();
       log(listTask.toString());
 
       return listTask;
