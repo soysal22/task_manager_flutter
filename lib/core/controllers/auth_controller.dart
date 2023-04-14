@@ -103,6 +103,7 @@ class AuthController extends GetxController {
 /// login With google
 
 Future<UserCredential?> signInWithGoogle() async {
+  Get.dialog(const Center(child: CircularProgressIndicator()));
   //<UserCredential>
   try {
     // Trigger the authentication flow
@@ -124,6 +125,7 @@ Future<UserCredential?> signInWithGoogle() async {
   } catch (e) {
     log(e.toString());
   }
+  Get.back();
 }
 
 Future<void> sigInOutWithGoogle() async {

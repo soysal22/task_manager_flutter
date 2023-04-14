@@ -1,21 +1,29 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:manger_mission/view/auth/login_page.dart';
 import 'package:manger_mission/view/deneme/deneme_obx_home.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: null,
+        body: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return const DenemeHome();
+            } else {
+              return const LoginPage();
+            }
+          },
+        ));
+  }
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  @override
+/*  // @override
   void initState() {
     super.initState();
     firebaseInit();
@@ -25,21 +33,19 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     setState(() {
-      if (FirebaseAuth.instance.currentUser != null) {
-        log(" ${FirebaseAuth.instance.currentUser?.displayName ?? "User Name"} Kullanıcısı Giriş Yaptı");
-        Get.to(() => const DenemeHome());
-      } else {
-        Get.to(() => const LoginPage());
-      }
+      FirebaseAuth.instance.userChanges().listen((User? user) {
+        if (user == null) {
+          Get.to(() => const LoginPage());
+        } else {
+          Get.to(() => const DenemeHome());
+        }
+      });
+      // if (FirebaseAuth.instance.currentUser != null) {
+      //   log(" ${FirebaseAuth.instance.currentUser?.displayName ?? "User Name"} Kullanıcısı Giriş Yaptı");
+      //   Get.to(() => const DenemeHome());
+      // } else {
+      //   Get.to(() => const LoginPage());
+      // }
     });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-        appBar: null,
-        body: Center(
-          child: CircularProgressIndicator(),
-        ));
-  }
-}
+ */
