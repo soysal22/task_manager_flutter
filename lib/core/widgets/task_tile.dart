@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/view/detail_page.dart';
@@ -29,22 +28,17 @@ class TaskTile extends StatelessWidget {
               children: [
                 Text(
                   task?.title ?? "title yok ",
-                  style: GoogleFonts.lato(
-                    textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Constants.colorWhite),
-                  ),
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Constants.colorWhite),
                 ),
                 Constants.sizedBoxHeight12,
                 _rowTimeTexts(),
                 Constants.sizedBoxHeight12,
                 Text(
                   task?.note ?? "note yok ",
-                  style: GoogleFonts.lato(
-                    textStyle:
-                        TextStyle(fontSize: 15, color: Constants.colorGrey100),
-                  ),
+                  style: TextStyle(fontSize: 15, color: Constants.colorGrey100),
                 ),
               ],
             ),
@@ -63,10 +57,7 @@ class TaskTile extends StatelessWidget {
                 },
                 child: Text(
                   "Detail Page",
-                  style: GoogleFonts.lato(
-                    textStyle:
-                        TextStyle(fontSize: 15, color: Constants.colorGrey100),
-                  ),
+                  style: TextStyle(fontSize: 15, color: Constants.colorGrey100),
                 ),
               )
             ],
@@ -81,12 +72,10 @@ class TaskTile extends StatelessWidget {
             quarterTurns: 3,
             child: Text(
               task?.isCompleted == 1 ? "COMPLETED" : "TODO",
-              style: GoogleFonts.lato(
-                textStyle: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Constants.colorWhite),
-              ),
+              style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Constants.colorWhite),
             ),
           ),
         ]),
@@ -106,9 +95,7 @@ class TaskTile extends StatelessWidget {
         Constants.sizedBoxWidth4,
         Text(
           "${task?.startTime} - ${task?.endTime}",
-          style: GoogleFonts.lato(
-            textStyle: TextStyle(fontSize: 13, color: Constants.colorGrey100),
-          ),
+          style: TextStyle(fontSize: 13, color: Constants.colorGrey100),
         ),
       ],
     );

@@ -1,21 +1,22 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty, library_private_types_in_public_api, unused_element, body_might_complete_normally_nullable, unrelated_type_equality_checks
+// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use, avoid_print, unnecessary_null_comparison, prefer_is_empty, library_private_types_in_public_api, unused_element, body_might_complete_normally_nullable, unrelated_type_equality_checks, use_build_context_synchronously
 import 'dart:developer';
-import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:manger_mission/core/constants/constants.dart';
-import 'package:manger_mission/core/controllers/task_controller.dart';
-import 'package:manger_mission/core/models/task_model.dart';
-import 'package:manger_mission/core/service/theme_services.dart';
-import 'package:manger_mission/core/style/textStyle.dart';
-import 'package:manger_mission/core/controllers/auth_controller.dart';
-import 'package:manger_mission/core/widgets/my_button.dart';
-import 'package:manger_mission/core/widgets/task_tile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:manger_mission/view/add_page.dart';
-import 'package:manger_mission/view/splash_screen.dart';
+import 'package:task/core/constants/constants.dart';
+import 'package:task/core/controllers/auth_controller.dart';
+import 'package:task/core/controllers/task_controller.dart';
+import 'package:task/core/models/task_model.dart';
+import 'package:task/core/service/theme_services.dart';
+import 'package:task/core/style/textStyle.dart';
+import 'package:task/core/widgets/my_button.dart';
+import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:task/core/widgets/task_tile.dart';
+import 'package:task/view/add_page.dart';
+import 'package:task/view/profil_page.dart';
+import 'package:task/view/splash_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,7 @@ class HomePage extends StatefulWidget {
 String? dateString;
 
 class _HomePageState extends State<HomePage> {
+  String? uid = FirebaseAuth.instance.currentUser?.uid;
   String? userName =
       FirebaseAuth.instance.currentUser?.displayName ?? " U.Name ";
   String? profilUrl = FirebaseAuth.instance.currentUser?.photoURL;
@@ -87,7 +89,6 @@ class _HomePageState extends State<HomePage> {
         onDateChange: (date) {
           setState(() {
             selectedDate = date;
-            dateString = DateFormat.yMd().format(selectedDate);
 
             log("selectedDate :$dateString");
           });
@@ -98,7 +99,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _addTaskBar() {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+      padding: const EdgeInsets.all(20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -118,7 +119,11 @@ class _HomePageState extends State<HomePage> {
           MyButton(
             title: "+ Add Task",
             onPressed: () {
-              Get.to(() => const AddPage());
+              setState(() {
+                taskController.idcount.value = gelenTask!.length++;
+
+                Get.to(() => const AddPage());
+              });
             },
           ),
         ],
@@ -142,62 +147,76 @@ class _HomePageState extends State<HomePage> {
               style: titleStyle,
             ),
             Constants.sizedBoxWidth10,
-            Container(
-              width: 50,
-              height: 50,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(50)),
-              child: profilUrl == null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.asset(
-                        "assets/images/person.png",
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : const CircleAvatar(
-                      radius: 25,
-                      backgroundImage: AssetImage("assets/images/person.png")),
-            ),
+            _circleProfilIcon(),
             Constants.sizedBoxWidth10,
-            IconButton(
-                onPressed: () async {
-                  try {
-                    log("$userName Kullanıcısı Çıkış Yaptı");
-                    //Future.delayed(const Duration(milliseconds: 1000));
-                    Get.to(() => const SplashScreen());
-                    await sigInOutWithGoogle();
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                icon: Icon(
-                  Icons.power_settings_new_rounded,
-                  size: 35,
-                  color: Get.isDarkMode
-                      ? Constants.colorWhite
-                      : Constants.colorBlack,
-                ))
+            _logOutButton()
           ],
         ),
       ),
-      leading: IconButton(
-          onPressed: () {
-            ThemeService().switchTheme();
-
-            // notifyHelper.displayNotification(
-            //   title: "Theme Changed",
-            //   body: Get.isDarkMode
-            //       ? "Activeted Dark theme"
-            //       : "Activeted light theme",
-            // );
-            // notifyHelper.scheduledNotification();
-          },
-          icon: Icon(
-            Get.isDarkMode ? Icons.sunny : Icons.nightlight,
-            color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
-          )),
+      leading: _iconThemeButton(),
     );
+  }
+
+  IconButton _iconThemeButton() {
+    return IconButton(
+        onPressed: () {
+          ThemeService().switchTheme();
+
+          Get.isDarkMode
+              ? log("Activeted Dark theme")
+              : log("Activeted light theme");
+
+          // notifyHelper.displayNotification(
+          //   title: "Theme Changed",
+          //   body: Get.isDarkMode
+          //       ? "Activeted Dark theme"
+          //       : "Activeted light theme",
+          // );
+          // notifyHelper.scheduledNotification();
+        },
+        icon: Icon(
+          Get.isDarkMode ? Icons.sunny : Icons.nightlight,
+          color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
+        ));
+  }
+
+  InkWell _circleProfilIcon() {
+    return InkWell(
+      onTap: () => ProfilPage(),
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+        child: profilUrl == null
+            ? const CircleAvatar(
+                radius: 25,
+                backgroundImage: AssetImage("assets/images/person.png"))
+            : ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.network(
+                  profilUrl!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+      ),
+    );
+  }
+
+  IconButton _logOutButton() {
+    return IconButton(
+        onPressed: () async {
+          try {
+            log("$userName Kullanıcısı Çıkış Yaptı");
+            await sigInOutWithGoogle();
+          } catch (e) {
+            log("Çıkkış butonu hatası budur :$e");
+          }
+        },
+        icon: Icon(
+          Icons.power_settings_new_rounded,
+          size: 35,
+          color: Get.isDarkMode ? Constants.colorWhite : Constants.colorBlack,
+        ));
   }
 }
 
@@ -215,10 +234,8 @@ String? deleteId;
 int? newCompleted;
 List<TaskModel>? gelenTask;
 
-//List<TaskModel>? gelenTask;
-List<DocumentSnapshot>? listOfDocumentSnap;
-
 String? uid = FirebaseAuth.instance.currentUser?.uid;
+List<DocumentSnapshot>? listOfDocumentSnap;
 
 final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance
     .collection('kullanicilar')
@@ -240,6 +257,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
           if (snapshot.connectionState == ConnectionState.none) {
             return const Placeholder();
           }
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Padding(
               padding: EdgeInsets.only(top: Get.width / 4),
@@ -247,7 +265,7 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
             );
           }
 
-          log("uid : $uid");
+          log("USER  uid : $uid");
 
           try {
             listOfDocumentSnap = snapshot.data.docs;
@@ -258,11 +276,13 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
                     (e) => TaskModel.fromJson(e.data() as Map<String, dynamic>))
                 .toList();
             log("gelen Task  length : ${gelenTask?.length}");
+
+            log("gelen Task   : $gelenTask");
           } catch (e) {
             log("error :  $e");
           }
 
-          log("gelen deneme Task  length : ${taskController.listTask.length}");
+          //  log("gelen deneme Task  length : ${taskController.listTask.length}");
 
           return _designHomeListView();
         });
@@ -275,15 +295,29 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
             : ListView.builder(
                 itemCount: gelenTask?.length,
                 itemBuilder: (context, index) {
-                  TaskModel? task = gelenTask?[index];
+                  var task = gelenTask?[index];
                   log("Task Date : ${task?.date.toString() ?? "date yok "} ");
-                  return GestureDetector(
-                      onTap: () {
-                        _showBottomSheet(context, task);
 
-                        deleteId = listOfDocumentSnap?[index].reference.id;
-                      },
-                      child: TaskTile(task: task));
+                  return GestureDetector(
+                    onTap: () {
+                      _showBottomSheet(context, task);
+
+                      deleteId = listOfDocumentSnap?[index].reference.id;
+                    },
+                    child: Dismissible(
+                      key: ObjectKey(task),
+                      background: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          color: Constants.colorRed,
+                          child: const Icon(
+                            Icons.delete,
+                            size: 32,
+                            color: Constants.colorWhite,
+                          )),
+                      child: TaskTile(task: task),
+                    ),
+                  );
                 }));
   }
 
@@ -340,7 +374,6 @@ class _FirebaseGetDataState extends State<FirebaseGetData> {
     return Padding(
       padding: EdgeInsets.only(top: Get.width / 3),
       child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(
             Icons.drafts_sharp,

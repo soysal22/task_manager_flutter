@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/models/task_model.dart';
 import 'package:manger_mission/core/style/textStyle.dart';
@@ -82,15 +81,12 @@ class DetailPage extends StatelessWidget {
             size: 25,
           )),
       centerTitle: true,
-      title: Text(
-        "Flutter",
-        style: GoogleFonts.lato(
-            textStyle: const TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-          color: Constants.colorWhite,
-        )),
-      ),
+      title: const Text("Flutter",
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Constants.colorWhite,
+          )),
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:manger_mission/core/constants/constants.dart';
 import 'package:manger_mission/core/controllers/task_controller.dart';
@@ -73,24 +72,18 @@ class _DenemeHomeState extends State<DenemeHome> {
         initialSelectedDate: DateTime.now(),
         selectionColor: Constants.primaryColor,
         selectedTextColor: Constants.colorWhite,
-        dateTextStyle: GoogleFonts.lato(
-          textStyle: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Constants.colorGrey),
-        ),
-        dayTextStyle: GoogleFonts.lato(
-          textStyle: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Constants.colorGrey),
-        ),
-        monthTextStyle: GoogleFonts.lato(
-          textStyle: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Constants.colorGrey),
-        ),
+        dateTextStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Constants.colorGrey),
+        dayTextStyle: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Constants.colorGrey),
+        monthTextStyle: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Constants.colorGrey),
         onDateChange: (date) {
           setState(() {
             selectedDate = date;
